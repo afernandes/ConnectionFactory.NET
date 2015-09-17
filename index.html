@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>ConnectionFactory.NET by afernandes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">ConnectionFactory.NET</h1>
+      <h2 class="project-tagline">Connection Factory</h2>
+      <a href="https://github.com/afernandes/ConnectionFactory.NET" class="btn">View on GitHub</a>
+      <a href="https://github.com/afernandes/ConnectionFactory.NET/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/afernandes/ConnectionFactory.NET/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="framework-connection-factory" class="anchor" href="#framework-connection-factory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Framework Connection Factory</h1>
+
+<p>[TOC]</p>
+
+<h2>
+<a id="objetivo" class="anchor" href="#objetivo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objetivo</h2>
+
+<p>Oferecer um conjunto de funções para comunicação com banco de dados auxiliando no trabalho dos desenvolvedores de sistemas.</p>
+
+<h2>
+<a id="premissas" class="anchor" href="#premissas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Premissas</h2>
+
+<p>implementar funções similares ao iBATIS DAO que simplificando a camada de persistência com o banco de dados, mas <strong>não utilizar os XML de mapeamento</strong>. </p>
+
+<h2>
+<a id="características" class="anchor" href="#caracter%C3%ADsticas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Características</h2>
+
+<p>Suporte a todos provedores de bancos de dados que implementam o ADO.NET
+: Tudo que é necessário para para se conectar a um novo banco é adicioná-lo ao arquivo de configurações  (<a href="#web.config">exemplo do Web.config</a>)
+<a href="https://msdn.microsoft.com/pt-br/library/dd363565.aspx">Bancos de dados suportados (SQl Server, Oracle, MySQL, etc)</a></p>
+
+<p>Conexão simplificada
+: Conecta ao banco passando apenas o nome da conexão gravado no arquivo de configurações. (<a href="#conectando">exemplo</a>)</p>
+
+<p>Transação entre servidores / bancos de dados
+: Transações entre múltiplas conexões independente se estão em bancos de dados ou servidores diferentes (<a href="#transactionScope">exemplo</a>)</p>
+
+<p>Retorno automático de entidades (DTO / VO) carregadas a partir das querys
+: Executa as querys e carrega as entidades automaticamente evitando linhas repetitivas de codigo para carregar cada membro do objeto. (<a href="#AutoLoadEntities">exemplo</a>)</p>
+
+<h2>
+<a id="pré-requisito" class="anchor" href="#pr%C3%A9-requisito" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pré-requisito</h2>
+
+<h3>
+<a id="coordenador-de-transações-distribuídas-msdtc" class="anchor" href="#coordenador-de-transa%C3%A7%C3%B5es-distribu%C3%ADdas-msdtc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Coordenador de Transações Distribuídas (MSDTC)</h3>
+
+<blockquote>
+<p>MSDTC - Microsoft Distributed Transaction Coordinator </p>
+</blockquote>
+
+<h4>
+<a id="o-que-faz-o-coordenador-de-transações-distribuídas" class="anchor" href="#o-que-faz-o-coordenador-de-transa%C3%A7%C3%B5es-distribu%C3%ADdas" aria-hidden="true"><span class="octicon octicon-link"></span></a>O que faz o Coordenador de Transações Distribuídas?</h4>
+
+<p>O serviço DTC (Coordenador de Transações Distribuídas) coordena as transações que atualizam dois ou mais recursos protegidos por transação, como bancos de dados, filas de mensagens, sistemas de arquivos, entre outros. Esses recursos protegidos por transação podem estar em um único computador ou distribuídos em vários computadores em rede.</p>
+
+<h4>
+<a id="configurando-o-serviço-do-msdtc" class="anchor" href="#configurando-o-servi%C3%A7o-do-msdtc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurando o serviço do MSDTC</h4>
+
+<p>Ativar o MSDTC
+: Certifique-se de que o MSDTC está habilitado em ambos os servidores de banco de dados.</p>
+
+<pre><code>- Em caso de aplicações Web, também deve estar ativo no servidor IIS
+- Em caso de aplicações Desktop, tambem deve estar ativo nas maquinas cliente que rodam o aplicativo.
+- Em todos os casos também deve estar ativo no computador dos desenvolvedores para possibilitar o debug das `TransactionScope`
+</code></pre>
+
+<ol>
+<li>
+<p><strong>Ativar o Serviço do MSDTC</strong></p>
+
+<ol>
+<li>Vá em Iniciar -&gt; Executar -&gt; digite: "<strong>Services.msc</strong>"</li>
+<li>Ative o serviço: Coordenador de Transações Distribuídas</li>
+</ol>
+</li>
+<li>
+<p><strong>Configurar o MSDTC</strong></p>
+
+<ol>
+<li>Vá em Iniciar -&gt; Painel de Controle -&gt; Ferramentas Administrativas -&gt; <strong>Serviços de Componentes</strong> 
+
+<ol>
+<li>Ou Executar: <strong>%windir%\system32\comexp.msc</strong>
+</li>
+<li>Ou Executar: <strong>dcomcnfg.exe</strong>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>Navegue até...</strong></p>
+
+<ol>
+<li><p><strong>No Windows 7</strong>
+Expanda Raiz do console <strong>-&gt;</strong> Serviços de componente <strong>-&gt;</strong> Computadores <strong>-&gt;</strong> Meu computador <strong>-&gt;</strong> Coordenador de Transações Distribuídas <strong>-&gt;</strong> Local DTC
+<strong>Propriedades do Botão direito do mouse</strong></p></li>
+<li><p><strong>No Windows XP</strong>
+Expanda Raiz do console <strong>-&gt;</strong> Serviços de componente <strong>-&gt;</strong> Computadores <strong>-&gt;</strong> Meu computador 
+<strong>Propriedades do Botão direito do mouse</strong></p></li>
+</ol>
+</li>
+<li><p><strong>Permitir acesso ao DTC de Rede</strong>
+Vá na aba segurança e marque as opções </p></li>
+<li>[x] <strong>Acesso DTC de Rede</strong>
+</li>
+<li>[x] <strong>Permitir Entrada</strong>
+</li>
+<li>[x] <strong>Permitir Saída</strong>
+</li>
+<li>
+<p>[x] <strong>Nenhuma Autenticação Necessária</strong></p>
+
+<p><strong>Clique em Ok e Reinicie o computador</strong>
+<a href="https://suneethasdiary.files.wordpress.com/2011/05/msdtc-settings2.jpg"><img src="https://suneethasdiary.files.wordpress.com/2011/05/msdtc-settings2.jpg?w=274&amp;h=300" alt=""></a></p>
+</li>
+</ol>
+
+<h4>
+<a id="checar-se-msdtc-está-ativo-no-banco-de-dados" class="anchor" href="#checar-se-msdtc-est%C3%A1-ativo-no-banco-de-dados" aria-hidden="true"><span class="octicon octicon-link"></span></a>Checar se MSDTC está ativo no banco de dados</h4>
+
+<div class="highlight highlight-source-sql"><pre>USE master
+EXEC xp_servicecontrol N<span class="pl-s"><span class="pl-pds">'</span>querystate<span class="pl-pds">'</span></span>,N<span class="pl-s"><span class="pl-pds">'</span>msdtc<span class="pl-pds">'</span></span></pre></div>
+
+<h4>
+<a id="exemplo-c-de-uso-do-msdtc" class="anchor" href="#exemplo-c-de-uso-do-msdtc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exemplo C# de uso do MSDTC</h4>
+
+<h5>
+<a id="exemplo-sem-utilizar-a-connection-factory" class="anchor" href="#exemplo-sem-utilizar-a-connection-factory" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Exemplo sem utilizar a Connection Factory</strong>
+</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">using</span> System.Transactions;
+
+<span class="pl-k">using</span> (TransactionScope txSc = <span class="pl-k">new</span> TransactionScope())
+{
+    <span class="pl-c">//Conexão com o primeiro banco de dados</span>
+    <span class="pl-k">using</span> (SqlConnection cn = <span class="pl-k">new</span> SqlConnection(connStr1))
+    {
+        SqlCommand cmd = cn.CreateCommand();
+        cmd.CommandText = <span class="pl-s"><span class="pl-pds">"</span>Insert into Demo(DemoValue)  Values ('XXX')<span class="pl-pds">"</span></span>;
+        cn.Open();
+        cmd.ExecuteNonQuery();
+        cn.Close();
+    }
+
+    <span class="pl-c">//Conexão com o segundo banco de dados</span>
+    <span class="pl-k">using</span> (SqlConnection cn = <span class="pl-k">new</span> SqlConnection(connStr))
+    {
+        SqlCommand cmd = cn.CreateCommand();
+        cmd.CommandText = <span class="pl-s"><span class="pl-pds">"</span>Insert into Demo(DemoValue) Values ('YYY')<span class="pl-pds">"</span></span>;
+        cn.Open();
+        cmd.ExecuteNonQuery();
+        cn.Close();
+    }
+
+    Console.WriteLine( <span class="pl-s"><span class="pl-pds">"</span>Transaction identifier:<span class="pl-pds">"</span></span> +
+        Transaction.Current.TransactionInformation.
+        DistributedIdentifier);
+
+    <span class="pl-c">//Commit nas duas conexões dentro do escopo da transação</span>
+    txSc.Complete();
+}</pre></div>
+
+<h5>
+<a id="exemplo-utilizando-a-connection-factory" class="anchor" href="#exemplo-utilizando-a-connection-factory" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Exemplo utilizando a Connection Factory</strong>
+</h5>
+
+<p>Exemplo de uso da <code>TransactionScope</code> dentro da Camada <strong>BO</strong></p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> Int32 InsertOrUpdate(Vo.User user)
+{
+   Logger.Debug(<span class="pl-s"><span class="pl-pds">"</span>Begin Method<span class="pl-pds">"</span></span>);
+   <span class="pl-k">int</span> result = -<span class="pl-c1">1</span>;
+
+   <span class="pl-k">try</span>
+   {
+      <span class="pl-c">// limit transaction scope</span>
+      <span class="pl-k">using</span> (<span class="pl-k">var</span> scope = <span class="pl-k">new</span> TransactionScope())
+      {
+         <span class="pl-c">// call the UserDAO to save User in DB</span>
+         <span class="pl-k">var</span> userDAO = <span class="pl-k">new</span> UserDAO();
+         result = userDAO.SaveOrUpdate(user);
+
+         <span class="pl-c">// delete all dependecies before insert/update new ones</span>
+         userDAO.DeleteUserDependencies(result);
+
+         <span class="pl-c">// profile list relationship</span>
+         <span class="pl-k">if</span> (user.ProfileList != <span class="pl-c1">null</span> &amp;&amp; user.ProfileList.Count &gt; <span class="pl-c1">0</span>)
+         {
+            <span class="pl-k">foreach</span> (<span class="pl-k">var</span> profileUser <span class="pl-k">in</span> user.ProfileList)
+            {
+               <span class="pl-k">if</span> (profileUser != <span class="pl-c1">null</span>)
+               {
+                  userDAO.InsertUserProfile(result, profileUser.Id);
+               }
+            }
+         }
+
+         <span class="pl-c">// role list</span>
+         <span class="pl-k">if</span> (user.RolesList != <span class="pl-c1">null</span> &amp;&amp; user.RolesList.Count &gt; <span class="pl-c1">0</span>)
+         {
+            <span class="pl-k">foreach</span> (<span class="pl-k">var</span> role <span class="pl-k">in</span> user.RolesList)
+            {
+               <span class="pl-k">if</span> (role != <span class="pl-c1">null</span>)
+               {
+                  userDAO.InsertRole(result, role.Id);
+               }
+            }
+         }
+
+
+         scope.Complete();
+      }
+   }
+   <span class="pl-k">catch</span> (TransactionAbortedException tae)
+   {
+      Logger.Error(tae);
+      <span class="pl-k">throw</span> <span class="pl-k">new</span> BusinessException(<span class="pl-s"><span class="pl-pds">"</span>Error on persistence layer<span class="pl-pds">"</span></span>, tae);
+   }
+   <span class="pl-k">catch</span> (LockException lockex)
+   {
+      Logger.Error(lockex);
+      <span class="pl-k">throw</span> <span class="pl-k">new</span> LockException(<span class="pl-s"><span class="pl-pds">"</span>Lock Exception<span class="pl-pds">"</span></span>, lockex);
+   }
+   <span class="pl-k">catch</span> (PersistenceException pex)
+   {
+      Logger.Error(pex);
+      <span class="pl-k">throw</span> <span class="pl-k">new</span> BusinessException(<span class="pl-s"><span class="pl-pds">"</span>Error on persistence layer<span class="pl-pds">"</span></span>, pex);
+   }
+   <span class="pl-k">catch</span> (Exception ex)
+   {
+      Logger.Error(ex);
+      <span class="pl-k">throw</span> <span class="pl-k">new</span> BusinessException(<span class="pl-s"><span class="pl-pds">"</span>An unexpected error has occured while handling business layer info.<span class="pl-pds">"</span></span>, ex);
+   }
+
+   Logger.Debug(<span class="pl-s"><span class="pl-pds">"</span>End Method<span class="pl-pds">"</span></span>);
+
+   <span class="pl-k">return</span> result;
+}</pre></div>
+
+<h3>
+<a id="arquivo-de-configurações" class="anchor" href="#arquivo-de-configura%C3%A7%C3%B5es" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="web.config">Arquivo de Configurações</a>
+</h3>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">connectionStrings</span>&gt;
+  &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span> 
+       <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>Data Source=INSTANCIA;</span>
+<span class="pl-s">                    Initial Catalog=dtb_X;</span>
+<span class="pl-s">                    User Id=******; </span>
+<span class="pl-s">                    Password=*****;</span>
+<span class="pl-s">                    App=NomeSistema;</span>
+<span class="pl-s">                    MultipleActiveResultSets=True;<span class="pl-pds">"</span></span>    
+       <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Data.SqlClient<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">connectionStrings</span>&gt;</pre></div>
+
+<p>(<a href="#conectando">Exemplo de chamada da conexão</a>)</p>
+
+<h2>
+<a id="connectionfactorycfconnection" class="anchor" href="#connectionfactorycfconnection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="CfConnection">ConnectionFactory.CfConnection</a>
+</h2>
+
+<h3>
+<a id="exemplo-de-conexão-com-o-banco-de-dados" class="anchor" href="#exemplo-de-conex%C3%A3o-com-o-banco-de-dados" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="conectando">Exemplo de conexão com o banco de dados</a>
+</h3>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+{
+    ...
+}</pre></div>
+
+<p>(<a href="#web.config">Exemplo do arquivo de configurações para a conexão "DEFAULT"</a>)</p>
+
+<h3>
+<a id="transação-com-múltiplas-conexões-transactionscope" class="anchor" href="#transa%C3%A7%C3%A3o-com-m%C3%BAltiplas-conex%C3%B5es-transactionscope" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="transactionScope">Transação com múltiplas conexões (TransactionScope)</a>
+</h3>
+
+<p>A <code>TransactionScope</code>pode ser utilizada em qualquer camada, tanto camada <strong>DAO</strong> com na <strong>BO</strong></p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">try</span>
+{
+   <span class="pl-c">// Requer o MSDTC ativo</span>
+   <span class="pl-k">using</span> (<span class="pl-k">var</span> scope = <span class="pl-k">new</span> TransactionScope())
+   {
+
+      <span class="pl-c">//Conexão com banco A no servidor X</span>
+      <span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+      {
+         ...
+      }
+
+      <span class="pl-c">//Conexão com o banco B no servidor Y</span>
+      <span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>PORTAL<span class="pl-pds">"</span></span>))
+      {
+         ...
+      }
+
+      <span class="pl-c">//Commit em todas as conexões dentro do escopo</span>
+      scope.Complete();
+   }
+   <span class="pl-k">catch</span> (TransactionAbortedException tae)
+   {
+      <span class="pl-c">//Rollback devido erro na transação</span>
+      ...
+   }
+   <span class="pl-k">catch</span> (Exception ex)
+   {
+      <span class="pl-c">//Rollback automatico em todas as conexões dentro do TransactionScope em caso de erros</span>
+      ...
+   }
+}</pre></div>
+
+<h3>
+<a id="exemplo-de-query-retornando-entidade-carregada" class="anchor" href="#exemplo-de-query-retornando-entidade-carregada" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="query">Exemplo de Query retornando entidade carregada</a>
+</h3>
+
+<p>Executa a consulta no banco de dados e carrega automaticamente as entidades (VO / DTO), de forma simples, rápida e evitando erros de conversão incorreta.</p>
+
+<div class="highlight highlight-source-cs"><pre>Vo.User user;
+<span class="pl-k">const</span> <span class="pl-k">string</span> sql = <span class="pl-s"><span class="pl-pds">@"SELECT * FROM SIS_USER WHERE ID = @Id"</span></span>;
+
+<span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+{
+   <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+   {
+      <span class="pl-c">//Listagem de parâmetros</span>
+      <span class="pl-k">var</span> param = <span class="pl-k">new</span> List&lt;CfParameter&gt;
+      {
+         <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@Id<span class="pl-pds">"</span></span>, id, DbType.Int32)
+      };
+
+      <span class="pl-c">//Executa query e retorna DTO carregada</span>
+      user = cmd.QueryForObject&lt;Vo.User&gt;
+              (CommandType.Text, sql, param);
+   }
+}</pre></div>
+
+<h2>
+<a id="connectionfactorycfcommand" class="anchor" href="#connectionfactorycfcommand" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="CfCommand">ConnectionFactory.CfCommand</a>
+</h2>
+
+<h3>
+<a id="executescalar" class="anchor" href="#executescalar" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="ExecuteScalar">ExecuteScalar</a>
+</h3>
+
+<p>Exemplo de um <strong>INSERT</strong> retornando o <strong>ID</strong>.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+{
+   <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+   {
+      <span class="pl-k">var</span> parameters =
+         <span class="pl-k">new</span> List&lt;CfParameter&gt;
+         {
+            <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@Name<span class="pl-pds">"</span></span>, entity.Name),
+            <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@TimeStamp<span class="pl-pds">"</span></span>, entity.TimeStamp),
+            <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@IsActive<span class="pl-pds">"</span></span>, entity.IsActive),
+            <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@DisplayName<span class="pl-pds">"</span></span>, entity.DisplayName)
+         };
+
+      <span class="pl-k">int</span> id = cmd.ExecuteScalar&lt;<span class="pl-k">int</span>&gt;(CommandType.Text,
+         @<span class="pl-s"><span class="pl-pds">"</span>INSERT INTO SIS_PROFILE</span>
+<span class="pl-s">             (NAME,  UPDATE_TIME, IS_ACTIVE, DISPLAY_NAME)</span>
+<span class="pl-s">          VALUES </span>
+<span class="pl-s">             (@Name, @TimeStamp,  @IsActive, @DisplayName)</span>
+<span class="pl-s"></span>
+<span class="pl-s">          SELECT CAST(SCOPE_IDENTITY() AS INT) AS ID<span class="pl-pds">"</span></span>
+         , parameters);
+   }
+}</pre></div>
+
+<h3>
+<a id="queryforobject" class="anchor" href="#queryforobject" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="QueryForObject">QueryForObject</a>
+</h3>
+
+<p>Executa a <strong>Query</strong> ou <strong>Procedure</strong> e retorna uma entidade carregada</p>
+
+<div class="highlight highlight-source-cs"><pre>Vo.User user;
+<span class="pl-k">const</span> <span class="pl-k">string</span> sql = <span class="pl-s"><span class="pl-pds">@"SELECT * FROM SIS_USER WHERE ID = @Id"</span></span>;
+
+<span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+{
+   <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+   {
+      <span class="pl-k">var</span> param = <span class="pl-k">new</span> List&lt;CfParameter&gt;
+      {
+         <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@Id<span class="pl-pds">"</span></span>, id, DbType.Int32)
+      };
+
+      user = cmd.QueryForObject&lt;Vo.User&gt;(CommandType.Text, sql, param);
+   }
+}</pre></div>
+
+<h3>
+<a id="queryforlist" class="anchor" href="#queryforlist" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="QueryForList">QueryForList</a>
+</h3>
+
+<p>Executa uma query ou procedure e retorna uma Lista de entidades.</p>
+
+<div class="highlight highlight-source-cs"><pre>IList&lt;Resource&gt; returnValue = <span class="pl-c1">null</span>;
+
+<span class="pl-k">string</span> sql = @<span class="pl-s"><span class="pl-pds">"</span>SELECT NAME RESOURCE_NAME</span>
+<span class="pl-s">               FROM SIS_RESOURCE</span>
+<span class="pl-s">               WHERE ENTITY_NAME=@EntityName<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(
+    Util.ConnectionNames.DEFAULT.ToString()))
+{
+    <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+    {
+       <span class="pl-k">var</span> param = <span class="pl-k">new</span> List&lt;CfParameter&gt;{
+          <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@EntityName<span class="pl-pds">"</span></span>,entityType)};
+
+       returnValue = cmd.QueryForList&lt;Resource&gt;
+           (CommandType.Text,sql,param);
+
+    }
+}</pre></div>
+
+<h3>
+<a id="executereader" class="anchor" href="#executereader" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="ExecuteReader">ExecuteReader</a>
+</h3>
+
+<p>Executa uma query ou procedure e retorna um <strong>DataReader</strong></p>
+
+<div class="highlight highlight-source-cs"><pre>IList&lt;<span class="pl-k">string</span>&gt; returnValue = <span class="pl-c1">null</span>;
+<span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+{
+    <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+    {
+        <span class="pl-k">const</span> <span class="pl-k">string</span> sql = <span class="pl-s"><span class="pl-pds">"</span>SELECT NAME FROM SIS_ENTITY<span class="pl-pds">"</span></span>;
+        <span class="pl-k">using</span> (<span class="pl-k">var</span> reader = cmd.ExecuteReader(CommandType.Text, sql))
+        {
+            <span class="pl-k">if</span> (reader.HasRows)
+            {
+                returnValue = <span class="pl-k">new</span> List&lt;String&gt;();
+                <span class="pl-k">while</span> (reader.Read())
+                {
+                    returnValue.Add(reader[<span class="pl-c1">0</span>].ToString());
+                }
+            }
+        }
+    }
+}
+
+<span class="pl-k">return</span> returnValue;</pre></div>
+
+<h3>
+<a id="executenonquery" class="anchor" href="#executenonquery" aria-hidden="true"><span class="octicon octicon-link"></span></a><a id="ExecuteNonQuery">ExecuteNonQuery</a>
+</h3>
+
+<p>Executa comando SQL sem retorno. Apropriado para INSERT, UPDATE e DELETE</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> param =
+    <span class="pl-k">new</span> List&lt;CfParameter&gt;
+    {
+       <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@Id<span class="pl-pds">"</span></span>, entity.Id),
+       <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@TimeStamp<span class="pl-pds">"</span></span>, entity.TimeStamp),
+       <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@Name<span class="pl-pds">"</span></span>, entity.Name),
+       <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@IsActive<span class="pl-pds">"</span></span>, entity.IsActive),
+       <span class="pl-k">new</span> CfParameter(<span class="pl-s"><span class="pl-pds">"</span>@DisplayName<span class="pl-pds">"</span></span>, entity.DisplayName)
+    }; 
+
+ <span class="pl-k">using</span> (<span class="pl-k">var</span> conn = <span class="pl-k">new</span> CfConnection(<span class="pl-s"><span class="pl-pds">"</span>DEFAULT<span class="pl-pds">"</span></span>))
+ {
+    <span class="pl-k">using</span> (<span class="pl-k">var</span> cmd = conn.CreateCfCommand())
+    {
+       <span class="pl-c">//Executa comando SQL sem retorno de valor</span>
+       cmd.ExecuteNonQuery(CommandType.Text, 
+          @<span class="pl-s"><span class="pl-pds">"</span>UPDATE SIS_PROFILE</span>
+<span class="pl-s">            SET UPDATE_TIME = @TimeStamp, NAME         = @Name, </span>
+<span class="pl-s">                IS_ACTIVE   = @IsActive,  DISPLAY_NAME = @DisplayName</span>
+<span class="pl-s">            WHERE ID = @Id<span class="pl-pds">"</span></span>, param);
+    }
+ }</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/afernandes/ConnectionFactory.NET">ConnectionFactory.NET</a> is maintained by <a href="https://github.com/afernandes">afernandes</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
