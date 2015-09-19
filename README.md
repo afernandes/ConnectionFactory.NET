@@ -1,7 +1,24 @@
 Framework Connection Factory .NET
 ===================
 
-[TOC]
+<ul>
+<li><a href="#arquivo-de-configurações">Arquivo de Configurações</a></li>
+<li><a href="#connectionfactorycfconnection">Class ConnectionFactory.CfConnection</a><ul>
+<li><a href="#exemplo-de-conexão-com-o-banco-de-dados">Exemplo de conexão com o banco de dados</a></li>
+<li><a href="#transação-com-múltiplas-conexões-transactionscope">Transação com múltiplas conexões (TransactionScope)</a></li>
+<li><a href="#exemplo-de-query-retornando-entidade-carregada">Exemplo de Query retornando entidade carregada</a></li>
+</ul>
+</li>
+<li><a href="#connectionfactorycfcommand">Class ConnectionFactory.CfCommand</a><ul>
+<li><a href="#executescalar">ExecuteScalar</a></li>
+<li><a href="#queryforobject">QueryForObject</a></li>
+<li><a href="#queryforlist">QueryForList</a></li>
+<li><a href="#executereader">ExecuteReader</a></li>
+<li><a href="#executenonquery">ExecuteNonQuery</a></li>
+</ul>
+</li>
+</ul>
+
 
 ##Objetivo
 Oferecer um conjunto de funções para comunicação com banco de dados auxiliando no trabalho dos desenvolvedores de sistemas.
@@ -23,174 +40,6 @@ Transação entre servidores / bancos de dados
 
 Retorno automático de entidades (DTO / VO) carregadas a partir das querys
 : Executa as querys e carrega as entidades automaticamente evitando linhas repetitivas de codigo para carregar cada membro do objeto. ([exemplo](#AutoLoadEntities))
-
-##Pré-requisito
-
-###Coordenador de Transações Distribuídas (MSDTC)
-
->MSDTC - Microsoft Distributed Transaction Coordinator 
-
-#### O que faz o Coordenador de Transações Distribuídas?
-O serviço DTC (Coordenador de Transações Distribuídas) coordena as transações que atualizam dois ou mais recursos protegidos por transação, como bancos de dados, filas de mensagens, sistemas de arquivos, entre outros. Esses recursos protegidos por transação podem estar em um único computador ou distribuídos em vários computadores em rede.
-
-#### Configurando o serviço do MSDTC
-
-Ativar o MSDTC
-: Certifique-se de que o MSDTC está habilitado em ambos os servidores de banco de dados.
-
-	- Em caso de aplicações Web, também deve estar ativo no servidor IIS
-	- Em caso de aplicações Desktop, tambem deve estar ativo nas maquinas cliente que rodam o aplicativo.
-	- Em todos os casos também deve estar ativo no computador dos desenvolvedores para possibilitar o debug das `TransactionScope`
-
-1. **Ativar o Serviço do MSDTC**
-	1. Vá em Iniciar -> Executar -> digite: "**Services.msc**"
-	2. Ative o serviço: Coordenador de Transações Distribuídas
-
-2. **Configurar o MSDTC**
-	1. Vá em Iniciar -> Painel de Controle -> Ferramentas Administrativas -> **Serviços de Componentes** 
-		1. Ou Executar: **%windir%\system32\comexp.msc**
-		2. Ou Executar: **dcomcnfg.exe**
-
-3. **Navegue até...**
-	1. **No Windows 7**
-	Expanda Raiz do console **->** Serviços de componente **->** Computadores **->** Meu computador **->** Coordenador de Transações Distribuídas **->** Local DTC
-		**Propriedades do Botão direito do mouse**
-
- 2. **No Windows XP**
- Expanda Raiz do console **->** Serviços de componente **->** Computadores **->** Meu computador 
-**Propriedades do Botão direito do mouse**
-
-4. **Permitir acesso ao DTC de Rede**
-Vá na aba segurança e marque as opções 
-- [x] **Acesso DTC de Rede**
-- [x] **Permitir Entrada**
-- [x] **Permitir Saída**
-- [x] **Nenhuma Autenticação Necessária**
-
-	**Clique em Ok e Reinicie o computador**
-	[![](https://suneethasdiary.files.wordpress.com/2011/05/msdtc-settings2.jpg?w=274&h=300)](https://suneethasdiary.files.wordpress.com/2011/05/msdtc-settings2.jpg)
-
-#### Checar se MSDTC está ativo no banco de dados
-
-```sql
-USE master
-EXEC xp_servicecontrol N'querystate',N'msdtc'
-```
-
-#### Exemplo C# de uso do MSDTC
-
-##### **Exemplo sem utilizar a Connection Factory**
-```cs
-using System.Transactions;
-
-using (TransactionScope txSc = new TransactionScope())
-{
-	//Conexão com o primeiro banco de dados
-	using (SqlConnection cn = new SqlConnection(connStr1))
-    {
-		SqlCommand cmd = cn.CreateCommand();
-		cmd.CommandText = "Insert into Demo(DemoValue)  Values ('XXX')";
-		cn.Open();
-		cmd.ExecuteNonQuery();
-		cn.Close();
-	}
-
-	//Conexão com o segundo banco de dados
-	using (SqlConnection cn = new SqlConnection(connStr))
-    {
-		SqlCommand cmd = cn.CreateCommand();
-		cmd.CommandText = "Insert into Demo(DemoValue) Values ('YYY')";
-		cn.Open();
-		cmd.ExecuteNonQuery();
-		cn.Close();
-	}
-
-	Console.WriteLine( "Transaction identifier:" +
-		Transaction.Current.TransactionInformation.
-		DistributedIdentifier);
-    
-    //Commit nas duas conexões dentro do escopo da transação
-    txSc.Complete();
-}
-```
-
-##### **Exemplo utilizando a Connection Factory**
-
-Exemplo de uso da `TransactionScope` dentro da Camada **BO**
-
-```cs
-public Int32 InsertOrUpdate(Vo.User user)
-{
-   Logger.Debug("Begin Method");
-   int result = -1;
-
-   try
-   {
-      // limit transaction scope
-      using (var scope = new TransactionScope())
-      {
-         // call the UserDAO to save User in DB
-         var userDAO = new UserDAO();
-         result = userDAO.SaveOrUpdate(user);
-
-         // delete all dependecies before insert/update new ones
-         userDAO.DeleteUserDependencies(result);
-
-         // profile list relationship
-         if (user.ProfileList != null && user.ProfileList.Count > 0)
-         {
-            foreach (var profileUser in user.ProfileList)
-            {
-               if (profileUser != null)
-               {
-                  userDAO.InsertUserProfile(result, profileUser.Id);
-               }
-            }
-         }
-
-         // role list
-         if (user.RolesList != null && user.RolesList.Count > 0)
-         {
-            foreach (var role in user.RolesList)
-            {
-               if (role != null)
-               {
-                  userDAO.InsertRole(result, role.Id);
-               }
-            }
-         }
-
-
-         scope.Complete();
-      }
-   }
-   catch (TransactionAbortedException tae)
-   {
-      Logger.Error(tae);
-      throw new BusinessException("Error on persistence layer", tae);
-   }
-   catch (LockException lockex)
-   {
-      Logger.Error(lockex);
-      throw new LockException("Lock Exception", lockex);
-   }
-   catch (PersistenceException pex)
-   {
-      Logger.Error(pex);
-      throw new BusinessException("Error on persistence layer", pex);
-   }
-   catch (Exception ex)
-   {
-      Logger.Error(ex);
-      throw new BusinessException("An unexpected error has occured while handling business layer info.", ex);
-   }
-
-   Logger.Debug("End Method");
-
-   return result;
-}
-```
-
 
 ### <a id="web.config">Arquivo de Configurações
 
