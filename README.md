@@ -62,7 +62,7 @@ Retorno automático de entidades (DTO / VO) carregadas a partir das querys
 
 ### <a id="conectando">Exemplo de conexão com o banco de dados
 
-```cs
+```csharp
 using (var conn = new CfConnection("DEFAULT"))
 {
 	...
@@ -75,7 +75,7 @@ using (var conn = new CfConnection("DEFAULT"))
 
 A `TransactionScope`pode ser utilizada em qualquer camada, tanto camada **DAO** com na **BO**
 
-```cs
+```csharp
 try
 {
    // Requer o MSDTC ativo
@@ -115,7 +115,7 @@ try
 
 Executa a consulta no banco de dados e carrega automaticamente as entidades (VO / DTO), de forma simples, rápida e evitando erros de conversão incorreta.
 
-```cs
+```csharp
 Vo.User user;
 const string sql = @"SELECT * FROM SIS_USER WHERE ID = @Id";
 
@@ -143,7 +143,7 @@ using (var conn = new CfConnection("DEFAULT"))
 
 Exemplo de um **INSERT** retornando o **ID**.
 
-```cs
+```csharp
 using (var conn = new CfConnection("DEFAULT"))
 {
    using (var cmd = conn.CreateCfCommand())
@@ -174,7 +174,7 @@ using (var conn = new CfConnection("DEFAULT"))
 
 Executa a **Query** ou **Procedure** e retorna uma entidade carregada
 
-```cs
+```csharp
 Vo.User user;
 const string sql = @"SELECT * FROM SIS_USER WHERE ID = @Id";
 
@@ -196,7 +196,7 @@ using (var conn = new CfConnection("DEFAULT"))
 
 Executa uma query ou procedure e retorna uma Lista de entidades.
 
-```cs
+```csharp
 IList<Resource> returnValue = null;
 
 string sql = @"SELECT NAME RESOURCE_NAME
@@ -222,7 +222,7 @@ using (var conn = new CfConnection(
 
 Executa uma query ou procedure e retorna um **DataReader**
 
-```cs
+```csharp
 IList<string> returnValue = null;
 using (var conn = new CfConnection("DEFAULT"))
 {
@@ -250,7 +250,7 @@ return returnValue;
 
 Executa comando SQL sem retorno. Apropriado para INSERT, UPDATE e DELETE
 
-```cs
+```csharp
 var param =
     new List<CfParameter>
     {
