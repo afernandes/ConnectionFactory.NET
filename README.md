@@ -3,13 +3,15 @@ Framework Connection Factory .NET
 
 <ul>
 <li><a href="#arquivo-de-configurações">Arquivo de Configurações</a></li>
-<li><a href="#connectionfactorycfconnection">Class ConnectionFactory.CfConnection</a><ul>
+<li><a href="#connectionfactorycfconnection">Class ConnectionFactory.CfConnection</a>
+<ul>
 <li><a href="#exemplo-de-conexão-com-o-banco-de-dados">Exemplo de conexão com o banco de dados</a></li>
 <li><a href="#transação-com-múltiplas-conexões-transactionscope">Transação com múltiplas conexões (TransactionScope)</a></li>
 <li><a href="#exemplo-de-query-retornando-entidade-carregada">Exemplo de Query retornando entidade carregada</a></li>
 </ul>
 </li>
-<li><a href="#connectionfactorycfcommand">Class ConnectionFactory.CfCommand</a><ul>
+<li><a href="#connectionfactorycfcommand">Class ConnectionFactory.CfCommand</a>
+<ul>
 <li><a href="#executescalar">ExecuteScalar</a></li>
 <li><a href="#queryforobject">QueryForObject</a></li>
 <li><a href="#queryforlist">QueryForList</a></li>
@@ -17,6 +19,7 @@ Framework Connection Factory .NET
 <li><a href="#executenonquery">ExecuteNonQuery</a></li>
 </ul>
 </li>
+<li><a href="#Entity">Exemplo do mapeamento da entidade (VO / DTO) com o banco de dados</a></li>
 </ul>
 
 
@@ -274,3 +277,40 @@ var param =
     }
  }
 ```
+
+##<a id="Entity">Exemplo do mapeamento da entidade (VO / DTO) com o banco de dados
+
+Observe que o membro **PhoneNumber** tem um nome diferente no banco de dados **PHONE_NUMBER**
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Data.Linq.Mapping;
+
+namespace User.Vo
+{
+   /// <summary>
+   /// VO representing any User (customer, atendent, etc.).
+   /// </summary>
+   [Serializable]
+   public class User
+   {
+      #region Properties
+      /// <summary>
+      /// The unique identifier for User
+      /// </summary>
+      public Int32 Id { get; set; }
+      /// <summary>
+      /// The User Name
+      /// </summary>
+      public string UserName { get; set; }
+      /// <summary>
+      /// The User phone number
+      /// </summary>
+      [Column(Name = "PHONE_NUMBER")]  // <-- Column name in database
+      public String PhoneNumber { get; set; }
+      #endregion
+   }
+}
+```
+
