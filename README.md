@@ -24,7 +24,7 @@ Framework Connection Factory .NET
 Oferecer um conjunto de funções para comunicação com banco de dados auxiliando no trabalho dos desenvolvedores de sistemas.
 
 ## Premissas
-implementar funções similares ao iBATIS DAO que simplificando a camada de persistência com o banco de dados, mas **não utilizar os XML de mapeamento**. 
+implementar funções similares ao iBATIS DAO simplificando a camada de persistência com o banco de dados, mas **sem a necessidade de utilizar os XML para mapeamento das entidades**. 
 
 ##Características
 
@@ -36,10 +36,10 @@ Conexão simplificada
 : Conecta ao banco passando apenas o nome da conexão gravado no arquivo de configurações. ([exemplo](#conectando))
 
 Transação entre servidores / bancos de dados
-: Transações entre múltiplas conexões independente se estão em bancos de dados ou servidores diferentes ([exemplo](#transactionScope))
+: Transações entre múltiplas conexões independente se estão em bancos de dados ou servidores distintos ([exemplo](#transactionScope))
 
 Retorno automático de entidades (DTO / VO) carregadas a partir das querys
-: Executa as querys e carrega as entidades automaticamente evitando linhas repetitivas de codigo para carregar cada membro do objeto. ([exemplo](#AutoLoadEntities))
+: Executa as querys e carrega as entidades automaticamente evitando linhas repetitivas de código para carregar cada membro do objeto. ([exemplo](#AutoLoadEntities))
 
 ### <a id="web.config">Arquivo de Configurações
 
@@ -94,7 +94,7 @@ try
          ...
       }
 
-	  //Commit em todas as conexões dentro do escopo
+      //Commit em todas as conexões dentro do escopo
       scope.Complete();
    }
    catch (TransactionAbortedException tae)
@@ -123,13 +123,13 @@ using (var conn = new CfConnection("DEFAULT"))
 {
    using (var cmd = conn.CreateCfCommand())
    {
-	  //Listagem de parâmetros
+      //Listagem de parâmetros
       var param = new List<CfParameter>
       {
          new CfParameter("@Id", id, DbType.Int32)
       };
 
-	  //Executa query e retorna DTO carregada
+      //Executa query e retorna DTO carregada
       user = cmd.QueryForObject<Vo.User>
 		      (CommandType.Text, sql, param);
    }
