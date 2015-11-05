@@ -37,7 +37,7 @@ namespace ConnectionFactory
       }
 
       [System.Diagnostics.DebuggerStepThrough]
-      public void EstablishFactoryConnection()
+      internal void EstablishFactoryConnection()
       {
          try
          {
@@ -66,7 +66,7 @@ namespace ConnectionFactory
       }
 
       [System.Diagnostics.DebuggerStepThrough]
-      private void CloseFactoryConnection()
+      internal void CloseFactoryConnection()
       {
          if (_conn == null) return;
 
@@ -146,7 +146,7 @@ namespace ConnectionFactory
       }
 
       [System.Diagnostics.DebuggerStepThrough]
-      public CfTransaction CreateTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+      internal CfTransaction CreateTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
       {
          var cfConnection = this;
          return new CfTransaction(ref cfConnection, isolationLevel);

@@ -9,7 +9,7 @@ namespace ConnectionFactory
       private readonly CfConnection _conn;
 
       [System.Diagnostics.DebuggerStepThrough]
-      public CfTransaction(ref CfConnection cfConn, IsolationLevel isolationLevel)
+      internal CfTransaction(ref CfConnection cfConn, IsolationLevel isolationLevel)
       {
          _conn = cfConn;
          _conn.TransactionHandler(CfConnection.TransactionType.TransactionOpen, isolationLevel);

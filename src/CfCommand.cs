@@ -17,7 +17,7 @@ namespace ConnectionFactory
       private DbCommand _cmd;
 
       [System.Diagnostics.DebuggerStepThrough]
-      public CfCommand(ref CfConnection conn)
+      internal CfCommand(ref CfConnection conn)
       {
          _conn = conn;
       }
