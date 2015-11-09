@@ -55,7 +55,7 @@ namespace ConnectionFactory
          var columnAttribute =
          (ColumnAttribute)Attribute.GetCustomAttribute(targetType, typeof(ColumnAttribute));
 
-         if (columnAttribute != null && !String.IsNullOrWhiteSpace(columnAttribute.Name))
+         if (columnAttribute != null && !string.IsNullOrWhiteSpace(columnAttribute.Name))
          {
             return columnAttribute.Name.ToUpper();
          }
