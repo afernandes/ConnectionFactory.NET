@@ -1,8 +1,9 @@
-﻿namespace ConnectionFactory
+﻿using System.Runtime.InteropServices;
+
+namespace ConnectionFactory
 {
    using System;
    using System.Data;
-   using System.Runtime.InteropServices;
    using System.Collections.Generic;
    using System.ComponentModel;
    using System.Globalization;
@@ -118,7 +119,7 @@
 
          byte[] byteArray = new byte[nativestringlen];
 
-         Marshal.Copy(nativestring, byteArray, 0, nativestringlen);
+          Marshal.Copy(nativestring, byteArray, 0, nativestringlen);
 
          return _utf8.GetString(byteArray, 0, nativestringlen);
       }

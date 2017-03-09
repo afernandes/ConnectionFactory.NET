@@ -9,16 +9,16 @@ namespace ConnectionFactory
    /// <summary>
    /// The 'Singleton' class
    /// </summary>
-   internal sealed class CfEntityPropertiesPool
+   internal sealed class CfMapCache
    {
       // Static members are 'eagerly initialized', that is, 
       // immediately when class is loaded for the first time.
       // .NET guarantees thread safety for static initialization
-      private static readonly CfEntityPropertiesPool Instance = new CfEntityPropertiesPool();
+      private static readonly CfMapCache Instance = new CfMapCache();
       private readonly Dictionary<string, Dictionary<string, PropertyInfo>> _propertiesPool = new Dictionary<string, Dictionary<string, PropertyInfo>>();
 
       // Constructor (protected)
-      private CfEntityPropertiesPool() { }
+      private CfMapCache() { }
 
       [System.Diagnostics.DebuggerStepThrough]
       public static Dictionary<string, PropertyInfo> GetInstance(Type sourceType)
@@ -42,7 +42,7 @@ namespace ConnectionFactory
          var objectProperties = targetType.GetProperties();
 
          var hashtable = new Dictionary<string, PropertyInfo>();
-         foreach (var info in objectProperties.Where(info => info.CanWrite))
+         foreach (PropertyInfo info in objectProperties.Where(info => info.CanWrite))
          {
             hashtable[GetDbColumnName(info) ?? info.Name.ToUpper()] = info;
          }
@@ -50,16 +50,12 @@ namespace ConnectionFactory
       }
 
       [System.Diagnostics.DebuggerStepThrough]
-      private static string GetDbColumnName(PropertyInfo targetType)
+      private static string GetDbColumnName(MemberInfo targetType)
       {
          var columnAttribute =
          (ColumnAttribute)Attribute.GetCustomAttribute(targetType, typeof(ColumnAttribute));
 
-         if (columnAttribute != null && !string.IsNullOrWhiteSpace(columnAttribute.Name))
-         {
-            return columnAttribute.Name.ToUpper();
-         }
-         return null;
+         return !string.IsNullOrWhiteSpace(columnAttribute?.Name) ? columnAttribute.Name.ToUpper() : null;
       }
       
       #endregion
