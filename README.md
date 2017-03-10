@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/g0bhdeqso4eydfi6?svg=true)](https://ci.appveyor.com/project/afernandes/connectionfactory-net)
+
 Framework Connection Factory .NET
 ===================
 
