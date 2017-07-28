@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ConnectionFactory.NET</id>
+    <version>1.0.2</version>
+    <title>Framework Connection Factory .NET</title>
+    <authors>Anderson Fernandes do Nascimento</authors>
+    <owners>afernandes</owners>
+    <licenseUrl>https://github.com/afernandes/ConnectionFactory.NET/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>http://afernandes.github.io/ConnectionFactory.NET/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Functions similar to iBATIS and Dapper, but without XML</description>
+    <releaseNotes>ExecuteScalar, QueryForObject, QueryForList, ExecuteReader, ExecuteNonQuery</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>connection-factory dapper ibatis orm dal micro-orm</tags>
+	<dependencies>
+        <dependency id="log4net" version="2.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="lib\**" target="lib\" />
+  </files>
+</package>

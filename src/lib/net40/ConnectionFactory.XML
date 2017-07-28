@@ -1,0 +1,714 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConnectionFactory</name>
+    </assembly>
+    <members>
+        <member name="F:ConnectionFactory.CfCommand.Logger">
+            <summary>
+            Logger object.
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.LazyLoad(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Performs LazyLoad
+            </summary>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>IEnumerable IDataRecord</returns> 
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.LazyLoadForObjects``1(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Datareader Performs and returns the list loaded entities
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>list of entities</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.LazyLoadForObjects``1(System.Collections.Generic.IEnumerable{System.Data.IDataReader})">
+            <summary>
+            LazyLoadForObjects Performs and returns the list loaded entities
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="dr">datareader loaded</param>
+            <returns>list of entities</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.ExecuteReader(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Performs datareader
+            </summary>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>Data Reader</returns> 
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForList``1(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Datareader Performs and returns the list loaded entities
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>list of entities</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForList``1(System.Data.IDataReader)">
+            <summary>
+            Datareader Performs and returns the list loaded entities
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="dr">datareader loaded</param>
+            <returns>list of entities</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForList(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Datareader Performs and returns the list loaded entities
+            </summary>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>list of entities (ExpandoObject)</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForList(System.Data.IDataReader)">
+            <summary>
+            Datareader Performs and returns the list loaded entities
+            </summary>
+            <param name="dr">datareader loaded</param>
+            <returns>list of entities (ExpandoObject)</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForObject``1(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            Performs datareader and returns loaded entity
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>Entity</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.QueryForObject``1(System.Data.IDataReader)">
+            <summary>
+            Performs datareader and returns loaded entity
+            </summary>
+            <typeparam name="T">type of entity returned</typeparam>
+            <param name="dr">datareader loaded</param>
+            <returns>Entity</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfCommand.DataAdapter(System.Data.CommandType,System.String,System.Collections.Generic.IEnumerable{ConnectionFactory.CfParameter})">
+            <summary>
+            DataAdapter Performs and returns the DataSet
+            </summary>
+            <param name="cmdType">Command Type (text, procedure or table)</param>
+            <param name="cmdText">Command Text, procedure or table name</param>
+            <param name="cmdParms">Command Parameters (@parameter)</param>
+            <returns>DataSet</returns>
+        </member>
+        <member name="T:ConnectionFactory.CfConvert">
+            <summary>
+            This base class provides datatype conversion services for the Cf provider.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfConvert.UnixEpoch">
+            <summary>
+            The value for the Unix epoch (e.g. January 1, 1970 at midnight, in UTC).
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfConvert._datetimeFormats">
+            <summary>
+            An array of ISO8601 datetime formats we support conversion from
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfConvert._utf8">
+            <summary>
+            An UTF-8 Encoding instance, so we can convert strings to and from UTF-8
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfConvert._datetimeFormat">
+            <summary>
+            The default DateTime format for this instance
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.#ctor(ConnectionFactory.CfDateFormats)">
+            <summary>
+            Initializes the conversion class
+            </summary>
+            <param name="fmt">The default date/time format to use for this instance</param>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToUTF8(System.String)">
+            <summary>
+            Converts a string to a UTF-8 encoded byte array sized to include a null-terminating character.
+            </summary>
+            <param name="sourceText">The string to convert to UTF-8</param>
+            <returns>A byte array containing the converted string plus an extra 0 terminating byte at the end of the array.</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToUTF8(System.DateTime)">
+            <summary>
+            Convert a DateTime to a UTF-8 encoded, zero-terminated byte array.
+            </summary>
+            <remarks>
+            This function is a convenience function, which first calls ToString() on the DateTime, and then calls ToUTF8() with the
+            string result.
+            </remarks>
+            <param name="dateTimeValue">The DateTime to convert.</param>
+            <returns>The UTF-8 encoded string, including a 0 terminating byte at the end of the array.</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToString(System.String,System.Int32)">
+            <summary>
+            Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
+            </summary>
+            <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
+            <param name="nativestringlen">The number of bytes to decode</param>
+            <returns>A string containing the translated character(s)</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.UTF8ToString(System.String,System.Int32)">
+            <summary>
+            Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
+            </summary>
+            <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
+            <param name="nativestringlen">The number of bytes to decode</param>
+            <returns>A string containing the translated character(s)</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToDateTime(System.String)">
+            <summary>
+            Converts a string into a DateTime, using the current DateTimeFormat specified for the connection when it was opened.
+            </summary>
+            <remarks>
+            Acceptable ISO8601 DateTime formats are:
+              yyyy-MM-dd HH:mm:ss
+              yyyyMMddHHmmss
+              yyyyMMddTHHmmssfffffff
+              yyyy-MM-dd
+              yy-MM-dd
+              yyyyMMdd
+              HH:mm:ss
+              THHmmss
+            </remarks>
+            <param name="dateText">The string containing either a Tick value, a JulianDay double, or an ISO8601-format string</param>
+            <returns>A DateTime value</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToDateTime(System.Double)">
+            <summary>
+            Converts a julianday value into a DateTime
+            </summary>
+            <param name="julianDay">The value to convert</param>
+            <returns>A .NET DateTime</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToJulianDay(System.DateTime)">
+            <summary>
+            Converts a DateTime struct to a JulianDay double
+            </summary>
+            <param name="value">The DateTime to convert</param>
+            <returns>The JulianDay value the Datetime represents</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToString(System.DateTime)">
+            <summary>
+            Converts a DateTime to a string value, using the current DateTimeFormat specified for the connection when it was opened.
+            </summary>
+            <param name="dateValue">The DateTime value to convert</param>
+            <returns>Either a string consisting of the tick count for DateTimeFormat.Ticks, a JulianDay double, or a date/time in ISO8601 format.</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToDateTime(System.String,System.Int32)">
+            <summary>
+            Internal function to convert a UTF-8 encoded IntPtr of the specified length to a DateTime.
+            </summary>
+            <remarks>
+            This is a convenience function, which first calls ToString() on the IntPtr to convert it to a string, then calls
+            ToDateTime() on the string to return a DateTime.
+            </remarks>
+            <param name="ptr">A pointer to the UTF-8 encoded string</param>
+            <param name="len">The length in bytes of the string</param>
+            <returns>The parsed DateTime value</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.Split(System.String,System.Char)">
+            <summary>
+            Smart method of splitting a string.  Skips quoted elements, removes the quotes.
+            </summary>
+            <remarks>
+            This split function works somewhat like the String.Split() function in that it breaks apart a string into
+            pieces and returns the pieces as an array.  The primary differences are:
+            <list type="bullet">
+            <item><description>Only one character can be provided as a separator character</description></item>
+            <item><description>Quoted text inside the string is skipped over when searching for the separator, and the quotes are removed.</description></item>
+            </list>
+            Thus, if splitting the following string looking for a comma:<br/>
+            One,Two, "Three, Four", Five<br/>
+            <br/>
+            The resulting array would contain<br/>
+            [0] One<br/>
+            [1] Two<br/>
+            [2] Three, Four<br/>
+            [3] Five<br/>
+            <br/>
+            Note that the leading and trailing spaces were removed from each item during the split.
+            </remarks>
+            <param name="source">Source string to split apart</param>
+            <param name="separator">Separator character</param>
+            <returns>A string array of the split up elements</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToBoolean(System.Object)">
+            <summary>
+            Convert a value to true or false.
+            </summary>
+            <param name="source">A string or number representing true or false</param>
+            <returns></returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ToBoolean(System.String)">
+            <summary>
+            Convert a string to true or false.
+            </summary>
+            <param name="source">A string representing true or false</param>
+            <returns></returns>
+            <remarks>
+            "yes", "no", "y", "n", "0", "1", "on", "off" as well as Boolean.FalseString and Boolean.TrueString will all be
+            converted to a proper boolean value.
+            </remarks>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.ColumnToType(System.Data.DbType,System.Int32,ConnectionFactory.CfType)">
+            <summary>
+            Determines the data type of a column in a statement
+            </summary>
+            <param name="stmt">The statement to retrieve information for</param>
+            <param name="i">The column to retrieve type information on</param>
+            <param name="typ">The CfType to receive the affinity for the given column</param>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.CfTypeToType(ConnectionFactory.CfType)">
+            <summary>
+            Converts a CfType to a .NET Type object
+            </summary>
+            <param name="t">The CfType to convert</param>
+            <returns>Returns a .NET Type object</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.TypeToDbType(System.Type)">
+            <summary>
+            For a given intrinsic type, return a DbType
+            </summary>
+            <param name="typ">The native type to convert</param>
+            <returns>The corresponding (closest match) DbType</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.DbTypeToColumnSize(System.Data.DbType)">
+            <summary>
+            Returns the ColumnSize for the given DbType
+            </summary>
+            <param name="typ">The DbType to get the size of</param>
+            <returns></returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.DbTypeToType(System.Data.DbType)">
+            <summary>
+            Convert a DbType to a Type
+            </summary>
+            <param name="typ">The DbType to convert from</param>
+            <returns>The closest-match .NET type</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.TypeToAffinity(System.Type)">
+            <summary>
+            For a given type, return the closest-match Cf TypeAffinity, which only understands a very limited subset of types.
+            </summary>
+            <param name="typ">The type to evaluate</param>
+            <returns>The Cf type affinity for that type.</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfConvert.TypeNameToDbType(System.String)">
+            <summary>
+            For a given type name, return a closest-match .NET type
+            </summary>
+            <param name="Name">The name of the type to match</param>
+            <returns>The .NET DBType the text evaluates to.</returns>
+        </member>
+        <member name="T:ConnectionFactory.TypeAffinity">
+            <summary>
+            Cf has very limited types, and is inherently text-based.  The first 5 types below represent the sum of all types Cf
+            understands.  The DateTime extension to the spec is for internal use only.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Uninitialized">
+            <summary>
+            Not used
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Int64">
+            <summary>
+            All integers in Cf default to Int64
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Double">
+            <summary>
+            All floating point numbers in Cf default to double
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Text">
+            <summary>
+            The default data type of Cf is text
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Blob">
+            <summary>
+            Typically blob types are only seen when returned from a function
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.Null">
+            <summary>
+            Null types can be returned from functions
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.DateTime">
+            <summary>
+            Used internally by this provider
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.TypeAffinity.None">
+            <summary>
+            Used internally
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.CfDateFormats">
+            <summary>
+            This implementation of Cf for ADO.NET can process date/time fields in databases in only one of three formats.  Ticks, ISO8601
+            and JulianDay.
+            </summary>
+            <remarks>
+            ISO8601 is more compatible, readable, fully-processable, but less accurate as it doesn't provide time down to fractions of a second.
+            JulianDay is the numeric format the Cf uses internally and is arguably the most compatible with 3rd party tools.  It is
+            not readable as text without post-processing.
+            Ticks less compatible with 3rd party tools that query the database, and renders the DateTime field unreadable as text without post-processing.
+            
+            The preferred order of choosing a datetime format is JulianDay, ISO8601, and then Ticks.  Ticks is mainly present for legacy 
+            code support.
+            </remarks>
+        </member>
+        <member name="F:ConnectionFactory.CfDateFormats.Ticks">
+            <summary>
+            Using ticks is not recommended and is not well supported with LINQ.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfDateFormats.ISO8601">
+            <summary>
+            The default format for this provider.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfDateFormats.JulianDay">
+            <summary>
+            JulianDay format, which is what Cf uses internally
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfDateFormats.UnixEpoch">
+            <summary>
+            The whole number of seconds since the Unix epoch (January 1, 1970).
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.CfJournalModeEnum">
+            <summary>
+            This enum determines how Cf treats its journal file.
+            </summary>
+            <remarks>
+            By default Cf will create and delete the journal file when needed during a transaction.
+            However, for some computers running certain filesystem monitoring tools, the rapid
+            creation and deletion of the journal file can cause those programs to fail, or to interfere with Cf.
+            
+            If a program or virus scanner is interfering with Cf's journal file, you may receive errors like "unable to open database file"
+            when starting a transaction.  If this is happening, you may want to change the default journal mode to Persist.
+            </remarks>
+        </member>
+        <member name="F:ConnectionFactory.CfJournalModeEnum.Delete">
+            <summary>
+            The default mode, this causes Cf to create and destroy the journal file as-needed.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfJournalModeEnum.Persist">
+            <summary>
+            When this is set, Cf will keep the journal file even after a transaction has completed.  It's contents will be erased,
+            and the journal re-used as often as needed.  If it is deleted, it will be recreated the next time it is needed.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfJournalModeEnum.Off">
+            <summary>
+            This option disables the rollback journal entirely.  Interrupted transactions or a program crash can cause database
+            corruption in this mode!
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.CfType">
+            <summary>
+            Struct used internally to determine the datatype of a column in a resultset
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfType.Type">
+            <summary>
+            The DbType of the column, or DbType.Object if it cannot be determined
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfType.Affinity">
+            <summary>
+            The affinity of a column, used for expressions or when Type is DbType.Object
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.NetType">
+            <summary>
+            Intermediary types for converting between Cf data types and CLR data types
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Empty">
+            <summary>
+            Empty data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Object">
+            <summary>
+            Object data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.DBNull">
+            <summary>
+            SQL NULL value
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Boolean">
+            <summary>
+            Boolean data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Char">
+            <summary>
+            Character data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.SByte">
+            <summary>
+            Signed byte data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Byte">
+            <summary>
+            Byte data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Int16">
+            <summary>
+            Short/Int16 data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.UInt16">
+            <summary>
+            Unsigned short data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Int32">
+            <summary>
+            Integer data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.UInt32">
+            <summary>
+            Unsigned integer data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Int64">
+            <summary>
+            Long/Int64 data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.UInt64">
+            <summary>
+            Unsigned long data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Single">
+            <summary>
+            Single precision float data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Double">
+            <summary>
+            Double precision float data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.Decimal">
+            <summary>
+            Decimal data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.DateTime">
+            <summary>
+            DateTime data type
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.NetType.String">
+            <summary>
+            String data type
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.CfMapCache">
+            <summary>
+            The 'Singleton' class
+            </summary>
+        </member>
+        <member name="T:ConnectionFactory.CfException">
+            <summary>
+            This class represents the main exception for the Connection Factory.
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfException.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfException.#ctor(System.String)">
+            <summary>
+            Constructor holding the error message.
+            </summary>
+            <param name="msg">Error message</param>
+        </member>
+        <member name="M:ConnectionFactory.CfException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor holding the error message and the thrown ineer exception.
+            </summary>
+            <param name="msg">Error message</param>
+            <param name="innerExc">Thrown inner exception</param>
+        </member>
+        <member name="M:ConnectionFactory.CfException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor used when serialization is needed.
+            </summary>
+            <param name="info">Serialization information</param>
+            <param name="context">Serialization Streaming Context</param>
+        </member>
+        <member name="T:ConnectionFactory.CfParameter">
+            <summary>
+            Cf implementation of DbParameter.
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfParameter._dbType">
+            <summary>
+            The data type of the parameter
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfParameter._objValue">
+            <summary>
+            The value of the data in the parameter
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfParameter._parameterName">
+            <summary>
+            The column name
+            </summary>
+        </member>
+        <member name="F:ConnectionFactory.CfParameter._dataSize">
+            <summary>
+            The data size, unused by Cf
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String)">
+            <summary>
+            Constructs a named parameter given the specified parameter name
+            </summary>
+            <param name="parameterName">The parameter name</param>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Object)">
+            <summary>
+            Constructs a named parameter given the specified parameter name and initial value
+            </summary>
+            <param name="parameterName">The parameter name</param>
+            <param name="value">The initial value of the parameter</param>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Data.DbType)">
+            <summary>
+            Constructs a named parameter of the specified type
+            </summary>
+            <param name="parameterName">The parameter name</param>
+            <param name="dbType">The datatype of the parameter</param>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Constructs a named parameter of the specified type and source column reference
+            </summary>
+            <param name="parameterName">The parameter name</param>
+            <param name="dbType">The data type</param>
+            <param name="value">The initial value of the parameter</param>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            Constructs a named parameter of the specified type, size, source column and row version
+            </summary>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="parameterType">The data type</param>
+            <param name="parameterSize">The size of the parameter</param>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Data.DbType,System.Int32,System.Data.ParameterDirection,System.Boolean,System.Byte,System.Byte,System.Object)">
+            <summary>
+            Constructs a named parameter of the specified type, size, source column and row version
+            </summary>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="parameterType">The data type</param>
+            <param name="parameterSize">The size of the parameter</param>
+            <param name="direction">Only input parameters are supported in Cf</param>
+            <param name="isNullable">Ignored</param>
+            <param name="precision">Ignored</param>
+            <param name="scale">Ignored</param>
+            <param name="value">The initial value to assign the parameter</param>   
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.#ctor(System.String,System.Data.DbType,System.Int32,System.Data.ParameterDirection,System.Byte,System.Byte,System.Object)">
+            <summary>
+            Constructs a named parameter, yet another flavor
+            </summary>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="parameterType">The data type</param>
+            <param name="parameterSize">The size of the parameter</param>
+            <param name="direction">Only input parameters are supported in Cf</param>
+            <param name="precision">Ignored</param>
+            <param name="scale">Ignored</param>
+            <param name="value">The intial value to assign the parameter</param>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.IsNullable">
+            <summary>
+            Whether or not the parameter can contain a null value
+            </summary>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.ParamDbType">
+            <summary>
+            Returns the datatype of the parameter
+            </summary>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.ParamDirection">
+            <summary>
+            Supports only input parameters
+            </summary>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.ParamName">
+            <summary>
+            Returns the parameter name
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.ResetDbType">
+            <summary>
+            Resets the DbType of the parameter so it can be inferred from the value
+            </summary>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.Size">
+            <summary>
+            Returns the size of the parameter
+            </summary>
+        </member>
+        <member name="P:ConnectionFactory.CfParameter.ParamValue">
+            <summary>
+            Gets and sets the parameter value.  If no datatype was specified, the datatype will assume the type from the value given.
+            </summary>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.Clone">
+            <summary>
+            Clones a parameter
+            </summary>
+            <returns>A new, unassociated CfParameter</returns>
+        </member>
+        <member name="M:ConnectionFactory.CfParameter.ToString">
+            <summary>
+                <see cref="M:System.Object.ToString"/>
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
