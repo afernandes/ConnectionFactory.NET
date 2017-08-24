@@ -50,6 +50,30 @@
     <Compile Include="..\CfCommand.cs">
       <Link>CfCommand.cs</Link>
     </Compile>
+    <Compile Include="..\CfCommand.DataAdapter.cs">
+      <Link>CfCommand.DataAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.ExecuteNonQuery.cs">
+      <Link>CfCommand.ExecuteNonQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.ExecuteReader.cs">
+      <Link>CfCommand.ExecuteReader.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.ExecuteScalar.cs">
+      <Link>CfCommand.ExecuteScalar.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.LazyLoad.cs">
+      <Link>CfCommand.LazyLoad.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.LazyLoadForObjects.cs">
+      <Link>CfCommand.LazyLoadForObjects.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.QueryForList.cs">
+      <Link>CfCommand.QueryForList.cs</Link>
+    </Compile>
+    <Compile Include="..\CfCommand.QueryForObject.cs">
+      <Link>CfCommand.QueryForObject.cs</Link>
+    </Compile>
     <Compile Include="..\CfConnection.cs">
       <Link>CfConnection.cs</Link>
     </Compile>
