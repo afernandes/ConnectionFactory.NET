@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A1A20978-F2B5-433A-9FA0-79ACDC7FEAAB}</ProjectGuid>
+    <ProjectGuid>{E4237F09-E01C-4CB3-A9AF-05970DF33082}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConnectionFactory</RootNamespace>
-    <AssemblyName>ConnectionFactory</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>ConnectionFactoryNET45</RootNamespace>
+    <AssemblyName>ConnectionFactoryNET45</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ConnectionFactory.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,12 +28,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ConnectionFactory.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -48,30 +43,38 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CfConnection.cs" />
-    <Compile Include="CfCommand.cs" />
-    <Compile Include="CfConvert.cs" />
-    <Compile Include="CfMapCache.cs" />
-    <Compile Include="CfException.cs" />
-    <Compile Include="CfExtensions.cs" />
-    <Compile Include="CfParameter.cs" />
-    <Compile Include="CfTransaction.cs" />
+    <Compile Include="..\CfCommand.cs">
+      <Link>CfCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\CfConnection.cs">
+      <Link>CfConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\CfConvert.cs">
+      <Link>CfConvert.cs</Link>
+    </Compile>
+    <Compile Include="..\CfException.cs">
+      <Link>CfException.cs</Link>
+    </Compile>
+    <Compile Include="..\CfExtensions.cs">
+      <Link>CfExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\CfMapCache.cs">
+      <Link>CfMapCache.cs</Link>
+    </Compile>
+    <Compile Include="..\CfParameter.cs">
+      <Link>CfParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\CfTransaction.cs">
+      <Link>CfTransaction.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ConnectionFactory.nuspec" />
-    <None Include="nugetScript.bat" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\net40\ConnectionFactory.dll" />
-    <Content Include="lib\net40\ConnectionFactory.XML" />
-    <Content Include="lib\net45\ConnectionFactory.dll" />
-    <Content Include="lib\net45\ConnectionFactory.XML" />
-    <Content Include="nuget.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

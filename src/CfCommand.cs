@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Dynamic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using log4net;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace ConnectionFactory
 {
@@ -33,7 +39,7 @@ namespace ConnectionFactory
         #region ExecuteNonQuery
 
         //[System.Diagnostics.DebuggerStepThrough]
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public int ExecuteNonQuery(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             Logger.Debug("Begin Method");
             try
@@ -72,7 +78,7 @@ namespace ConnectionFactory
         /// <param name="cmdParms">Command Parameters (@parameter)</param>
         /// <returns>IEnumerable IDataRecord</returns> 
         [System.Diagnostics.DebuggerStepThrough]
-        public IEnumerable<IDataReader> LazyLoad(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public IEnumerable<IDataReader> LazyLoad(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             Logger.InfoFormat("LazyLoad: {0}", cmdText);
             Logger.Info(cmdParms);
@@ -103,7 +109,7 @@ namespace ConnectionFactory
         /// <returns>list of entities</returns>
         [System.Diagnostics.DebuggerStepThrough]
         public IEnumerable<T> LazyLoadForObjects<T>(
-            CommandType cmdType, string cmdText,IEnumerable<CfParameter> cmdParms = null) where T : new()
+            CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null) where T : new()
         {
             return LazyLoadForObjects<T>(LazyLoad(cmdType, cmdText, cmdParms));
         }
@@ -162,7 +168,7 @@ namespace ConnectionFactory
         }
 
         public IEnumerable<dynamic> LazyLoadForObjects(
-            CommandType cmdType, string cmdText,IEnumerable<CfParameter> cmdParms = null)
+            CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             return LazyLoadForObjects(LazyLoad(cmdType, cmdText, cmdParms));
         }
@@ -195,7 +201,7 @@ namespace ConnectionFactory
         /// <param name="cmdParms">Command Parameters (@parameter)</param>
         /// <returns>Data Reader</returns> 
         [System.Diagnostics.DebuggerStepThrough]
-        public IDataReader ExecuteReader(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public IDataReader ExecuteReader(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             try
             {
@@ -213,6 +219,55 @@ namespace ConnectionFactory
             }
         }
 
+        public IDataReader ExecuteReader(CfCommandType cmdType, string cmdText, object cmdParms)
+        {
+            try
+            {
+                IList<CfParameter> cfParams = null;
+                if (cmdParms != null)
+                {
+                    if (!(cmdParms is IEnumerable<CfParameter>))
+                    {
+
+                        var props = cmdParms as ExpandoObject as IDictionary<string, object>;
+                        if (props != null)
+                        {
+                            cfParams = new List<CfParameter>(props.Count());
+                            foreach (var p in props)
+                            {
+                                cfParams.Add(new CfParameter(p.Key, p.Value));
+                            }
+                        }
+                        else
+                        {
+                            var properties = cmdParms.GetType().GetProperties();
+                            if (properties.Any())
+                            {
+                                cfParams = new List<CfParameter>(properties.Count());
+                                foreach (var property in properties)
+                                {
+                                    cfParams.Add(new CfParameter(property.Name, property.GetValue(cmdParms, null)));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _conn.EstablishFactoryConnection();
+                PrepareCommand(cmdType, cmdText, cfParams);
+                return _cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                throw new CfException("Unknown Error (Connection Factory: ExecuteReader) " + ex.Message, ex);
+            }
+        }
+
+
+
+
+
         #endregion
 
         #region QueryForList
@@ -227,7 +282,7 @@ namespace ConnectionFactory
         /// <returns>list of entities</returns>
         [System.Diagnostics.DebuggerStepThrough]
         public IList<T> QueryForList<T>(
-            CommandType cmdType, string cmdText,IEnumerable<CfParameter> cmdParms = null) where T : new()
+            CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null) where T : new()
         {
             return QueryForList<T>(ExecuteReader(cmdType, cmdText, cmdParms));
         }
@@ -300,7 +355,7 @@ namespace ConnectionFactory
         /// <param name="cmdParms">Command Parameters (@parameter)</param>
         /// <returns>list of entities (ExpandoObject)</returns>
         public IList<dynamic> QueryForList(
-            CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+            CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             return QueryForList(ExecuteReader(cmdType, cmdText, cmdParms));
         }
@@ -339,7 +394,7 @@ namespace ConnectionFactory
         /// <param name="cmdParms">Command Parameters (@parameter)</param>
         /// <returns>Entity</returns>
         [System.Diagnostics.DebuggerStepThrough]
-        public T QueryForObject<T>(CommandType cmdType, string cmdText,
+        public T QueryForObject<T>(CfCommandType cmdType, string cmdText,
             IEnumerable<CfParameter> cmdParms = null) where T : new()
         {
             return QueryForObject<T>(ExecuteReader(cmdType, cmdText, cmdParms));
@@ -406,7 +461,7 @@ namespace ConnectionFactory
         }
 
         public dynamic QueryForObject(
-            CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+            CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             return QueryForObject(ExecuteReader(cmdType, cmdText, cmdParms));
         }
@@ -421,7 +476,7 @@ namespace ConnectionFactory
         #region ExecuteScalar
 
         [System.Diagnostics.DebuggerStepThrough]
-        public T ExecuteScalar<T>(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public T ExecuteScalar<T>(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             try
             {
@@ -453,7 +508,7 @@ namespace ConnectionFactory
             }
         }
 
-        public dynamic ExecuteScalar(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public dynamic ExecuteScalar(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             _conn.EstablishFactoryConnection();
             PrepareCommand(cmdType, cmdText, cmdParms);
@@ -480,7 +535,7 @@ namespace ConnectionFactory
         /// <param name="cmdParms">Command Parameters (@parameter)</param>
         /// <returns>DataSet</returns>
         [System.Diagnostics.DebuggerStepThrough]
-        public DataSet DataAdapter(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        public DataSet DataAdapter(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             // we use a try/catch here because if the method throws an exception we want to 
             // close the connection throw code, because no datareader will exist, hence the 
@@ -511,7 +566,7 @@ namespace ConnectionFactory
         #region PREPARE COMMAND AND CREATE PARAMETERS (Private Methods)
 
         [System.Diagnostics.DebuggerStepThrough]
-        private void PrepareCommand(CommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        private void PrepareCommand(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             _conn.EstablishFactoryConnection();
 
@@ -521,7 +576,7 @@ namespace ConnectionFactory
             _cmd = _conn.CreateDbCommand();
 
             _cmd.CommandText = cmdText;
-            _cmd.CommandType = cmdType;
+            _cmd.CommandType = (CommandType)cmdType;
 
             CreateDbParameters(cmdParms);
         }
@@ -554,4 +609,12 @@ namespace ConnectionFactory
         #endregion
 
     }
+
+    public enum CfCommandType
+    {
+        Text = 1,
+        StoredProcedure = 4,
+        TableDirect = 512,
+    }
+
 }
