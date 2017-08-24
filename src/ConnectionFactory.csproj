@@ -37,7 +37,6 @@
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -51,6 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CfCommand.DataAdapter.cs" />
+    <Compile Include="CfCommand.ExecuteNonQuery.cs" />
+    <Compile Include="CfCommand.ExecuteReader.cs" />
+    <Compile Include="CfCommand.ExecuteScalar.cs" />
+    <Compile Include="CfCommand.LazyLoad.cs" />
+    <Compile Include="CfCommand.LazyLoadForObjects.cs" />
+    <Compile Include="CfCommand.QueryForList.cs" />
+    <Compile Include="CfCommand.QueryForObject.cs" />
     <Compile Include="CfConnection.cs" />
     <Compile Include="CfCommand.cs" />
     <Compile Include="CfConvert.cs" />
