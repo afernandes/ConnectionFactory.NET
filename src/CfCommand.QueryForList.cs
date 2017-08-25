@@ -4,7 +4,11 @@ using System.Data;
 
 namespace ConnectionFactory
 {
+<<<<<<< HEAD
     public partial class CfCommand
+=======
+    public partial class CfCommand : IDisposable
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region QueryForList
 
@@ -23,6 +27,7 @@ namespace ConnectionFactory
             return QueryForList<T>(ExecuteReader(cmdType, cmdText, cmdParms));
         }
 
+<<<<<<< HEAD
         public IList<T> QueryForList<T>(
             CfCommandType cmdType, string cmdText, object cmdParms) where T : new()
         {
@@ -30,6 +35,8 @@ namespace ConnectionFactory
             return QueryForList<T>(cmdType, cmdText, cfParams);
         }
 
+=======
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         /// <summary>
         /// Datareader Performs and returns the list loaded entities
         /// </summary>
@@ -103,6 +110,7 @@ namespace ConnectionFactory
             return QueryForList(ExecuteReader(cmdType, cmdText, cmdParms));
         }
 
+<<<<<<< HEAD
         public IList<dynamic> QueryForList(
             CfCommandType cmdType, string cmdText, object cmdParms)
         {
@@ -110,6 +118,8 @@ namespace ConnectionFactory
             return QueryForList(cmdType, cmdText, cfParams);
         }
 
+=======
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         /// <summary>
         /// Datareader Performs and returns the list loaded entities
         /// </summary>

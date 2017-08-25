@@ -4,7 +4,11 @@ using System.Data;
 
 namespace ConnectionFactory
 {
+<<<<<<< HEAD
     public partial class CfCommand
+=======
+    public partial class CfCommand : IDisposable
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region LazyLoadForObjects
 
@@ -23,6 +27,7 @@ namespace ConnectionFactory
             return LazyLoadForObjects<T>(LazyLoad(cmdType, cmdText, cmdParms));
         }
 
+<<<<<<< HEAD
         public IEnumerable<T> LazyLoadForObjects<T>(
             CfCommandType cmdType, string cmdText, object cmdParms) where T : new()
         {
@@ -30,6 +35,8 @@ namespace ConnectionFactory
             return LazyLoadForObjects<T>(cmdType, cmdText, cfParams);
         }
 
+=======
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         /// <summary>
         /// LazyLoadForObjects Performs and returns the list loaded entities
         /// </summary>
@@ -89,6 +96,7 @@ namespace ConnectionFactory
             return LazyLoadForObjects(LazyLoad(cmdType, cmdText, cmdParms));
         }
 
+<<<<<<< HEAD
         public IEnumerable<dynamic> LazyLoadForObjects(
             CfCommandType cmdType, string cmdText, object cmdParms)
         {
@@ -96,6 +104,8 @@ namespace ConnectionFactory
             return LazyLoadForObjects(cmdType, cmdText, cfParams);
         }
 
+=======
+>>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         public static IEnumerable<dynamic> LazyLoadForObjects(IEnumerable<IDataReader> dr)
         {
             using (var enumerator = dr.GetEnumerator())
