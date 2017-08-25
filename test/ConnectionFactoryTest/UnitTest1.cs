@@ -1,4 +1,5 @@
-﻿using ConnectionFactory;
+﻿using System;
+using ConnectionFactory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -9,63 +10,58 @@ namespace ConnectionFactoryTest
     [TestClass]
     public class UnitTest1
     {
+        protected static readonly bool IsAppVeyor = Environment.GetEnvironmentVariable("Appveyor")?.ToUpperInvariant() == "TRUE";
+
+        protected static string ConnName => IsAppVeyor ? "AppVeyor" : "teste";
+
         [TestMethod]
         public void TestCommandWithDynamicParameters()
         {
-            try
+            string returnValue = null;
+            using (var conn = new CfConnection(ConnName))
             {
-                using (var conn = new CfConnection("teste"))
+                var cmd = conn.CreateCfCommand();
+
+                DbDataReader result = (DbDataReader)cmd.ExecuteReader(CfCommandType.Text,
+                    @"select *
+                          from(select 'user1' as login) as t
+                          where login = 'user1'",
+                    new { login = "user1" });
+
+                if (result.Read())
                 {
-                    var cmd = conn.CreateCfCommand();
-
-                    DbDataReader result = (DbDataReader)cmd.ExecuteReader(CfCommandType.Text,
-                        "select * from sisuser.sis_user where login = @login",
-                        new { login = "andersonn" });
-
-                    if (result.Read())
-                    {
-                        var ret = result["login"].ToString();
-                        Assert.IsTrue(!string.IsNullOrEmpty(ret));
-                    }
+                    returnValue = result["login"].ToString();
                 }
+            }
 
-                Assert.IsTrue(true);
-            }
-            catch
-            {
-                Assert.Fail();
-            }
+            Assert.AreEqual(returnValue, "user1");
+
         }
 
         [TestMethod]
         public void TestCommandWithExpandoObjectParameters()
         {
-            try
+            string returnValue = null;
+            using (var conn = new CfConnection(ConnName))
             {
-                using (var conn = new CfConnection("teste"))
+                var cmd = conn.CreateCfCommand();
+
+                var paramters = new ExpandoObject() as IDictionary<string, object>;
+                paramters.Add("login", "andersonn");
+
+                DbDataReader result = (DbDataReader)cmd.ExecuteReader(CfCommandType.Text,
+                      @"select *
+                          from(select 'user1' as login) as t
+                          where login = 'user1'",
+                    paramters);
+
+                if (result.Read())
                 {
-                    var cmd = conn.CreateCfCommand();
-
-                    var paramters = new ExpandoObject() as IDictionary<string, object>;
-                    paramters.Add("login", "andersonn");
-
-                    DbDataReader result = (DbDataReader)cmd.ExecuteReader(CfCommandType.Text,
-                        "select * from sisuser.sis_user where login = @login",
-                        paramters);
-
-                    if (result.Read())
-                    {
-                        var ret = result["login"].ToString();
-                        Assert.IsTrue(!string.IsNullOrEmpty(ret));
-                    }
+                    returnValue = result["login"].ToString();
                 }
+            }
 
-                Assert.IsTrue(true);
-            }
-            catch
-            {
-                Assert.Fail();
-            }
+            Assert.AreEqual(returnValue, "user1");
         }
 
     }
