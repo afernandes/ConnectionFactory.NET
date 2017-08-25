@@ -4,14 +4,10 @@ using System.Data;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
+
     public partial class CfCommand
-=======
-    public partial class CfCommand : IDisposable
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region LazyLoad
-
         /// <summary>
         /// Performs LazyLoad
         /// </summary>
@@ -36,16 +32,11 @@ namespace ConnectionFactory
                 }
             }
         }
-
-<<<<<<< HEAD
         public IEnumerable<IDataReader> LazyLoad(CfCommandType cmdType, string cmdText, object cmdParms)
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return LazyLoad(cmdType, cmdText, cfParams);
         }
-
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         #endregion
     }
 }

@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-<<<<<<< HEAD
 using System.Dynamic;
 using System.Linq;
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
 
 namespace ConnectionFactory
 {

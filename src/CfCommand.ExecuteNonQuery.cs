@@ -4,18 +4,10 @@ using System.Data.Common;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
     public partial class CfCommand
     {
         #region ExecuteNonQuery
-
-=======
-    public partial class CfCommand : IDisposable
-    {
-        #region ExecuteNonQuery
-
         //[System.Diagnostics.DebuggerStepThrough]
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         public int ExecuteNonQuery(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
             Logger.Debug("Begin Method");
@@ -42,16 +34,12 @@ namespace ConnectionFactory
                 throw new CfException("Error on Connection Factory Mechanism: " + ex.Message, ex);
             }
         }
-
-<<<<<<< HEAD
         public int ExecuteNonQuery(CfCommandType cmdType, string cmdText, object cmdParms)
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return ExecuteNonQuery(cmdType, cmdText, cfParams);
         }
-
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         #endregion
     }
+
 }

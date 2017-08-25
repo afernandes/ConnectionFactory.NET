@@ -3,14 +3,9 @@ using System.Collections.Generic;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
     public partial class CfCommand
-=======
-    public partial class CfCommand : IDisposable
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region ExecuteScalar
-
         [System.Diagnostics.DebuggerStepThrough]
         public T ExecuteScalar<T>(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
@@ -43,14 +38,11 @@ namespace ConnectionFactory
                 throw new CfException("Unknown Error (Connection Factory: ExecuteScalar) " + ex.Message, ex);
             }
         }
-<<<<<<< HEAD
         public T ExecuteScalar<T>(CfCommandType cmdType, string cmdText, object cmdParms)
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return ExecuteScalar<T>(cmdType, cmdText, cfParams);
         }
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
 
         public dynamic ExecuteScalar(CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
@@ -66,16 +58,11 @@ namespace ConnectionFactory
 
             return returnValue;
         }
-<<<<<<< HEAD
         public dynamic ExecuteScalar(CfCommandType cmdType, string cmdText, object cmdParms)
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return ExecuteScalar(cmdType, cmdText, cfParams);
         }
-
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
-
         #endregion
     }
 }

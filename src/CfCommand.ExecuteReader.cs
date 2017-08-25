@@ -6,14 +6,9 @@ using System.Linq;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
     public partial class CfCommand
-=======
-    public partial class CfCommand : IDisposable
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region ExecuteReader
-
         /// <summary>
         /// Performs datareader
         /// </summary>
@@ -39,13 +34,10 @@ namespace ConnectionFactory
                 throw new CfException("Unknown Error (Connection Factory: ExecuteReader) " + ex.Message, ex);
             }
         }
-
         public IDataReader ExecuteReader(CfCommandType cmdType, string cmdText, object cmdParms)
         {
-<<<<<<< HEAD
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return ExecuteReader(cmdType, cmdText, cfParams);
-=======
             try
             {
                 IList<CfParameter> cfParams = null;
@@ -87,9 +79,7 @@ namespace ConnectionFactory
                 Logger.Error(ex);
                 throw new CfException("Unknown Error (Connection Factory: ExecuteReader) " + ex.Message, ex);
             }
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         }
-
         #endregion
     }
 }

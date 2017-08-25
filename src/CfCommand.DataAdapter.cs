@@ -4,14 +4,9 @@ using System.Data;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
     public partial class CfCommand
-=======
-    public partial class CfCommand : IDisposable
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region DataAdapter
-
         /// <summary>
         /// DataAdapter Performs and returns the DataSet
         /// </summary>
@@ -45,16 +40,11 @@ namespace ConnectionFactory
                 throw new CfException("Unknown Error (Connection Factory: DataAdapter) " + ex.Message, ex);
             }
         }
-
-<<<<<<< HEAD
         public DataSet DataAdapter(CfCommandType cmdType, string cmdText, object cmdParms)
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return DataAdapter(cmdType, cmdText, cfParams);
         }
-
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         #endregion
     }
 }

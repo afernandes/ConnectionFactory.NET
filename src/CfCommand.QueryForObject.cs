@@ -4,11 +4,7 @@ using System.Data;
 
 namespace ConnectionFactory
 {
-<<<<<<< HEAD
     public partial class CfCommand
-=======
-    public partial class CfCommand : IDisposable
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
     {
         #region QueryForObject
 
@@ -27,7 +23,6 @@ namespace ConnectionFactory
             return QueryForObject<T>(ExecuteReader(cmdType, cmdText, cmdParms));
         }
 
-<<<<<<< HEAD
         public T QueryForObject<T>(CfCommandType cmdType, string cmdText,
             object cmdParms) where T : new()
         {
@@ -35,8 +30,6 @@ namespace ConnectionFactory
             return QueryForObject<T>(cmdType, cmdText, cfParams);
         }
 
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         /// <summary>
         /// Performs datareader and returns loaded entity
         /// </summary>
@@ -103,7 +96,6 @@ namespace ConnectionFactory
             return QueryForObject(ExecuteReader(cmdType, cmdText, cmdParms));
         }
 
-<<<<<<< HEAD
         public dynamic QueryForObject(
             CfCommandType cmdType, string cmdText, object cmdParms)
         {
@@ -111,8 +103,6 @@ namespace ConnectionFactory
             return QueryForObject(cmdType, cmdText, cfParams);
         }
 
-=======
->>>>>>> ba793c7ae09df0e7280087f86968eb9435428a79
         public static dynamic QueryForObject(IDataReader dr)
         {
             return dr.Read() ? dr.ToExpando() : null;
