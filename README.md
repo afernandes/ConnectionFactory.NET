@@ -1,7 +1,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g0bhdeqso4eydfi6?svg=true)](https://ci.appveyor.com/project/afernandes/connectionfactory-net)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?maxAge=60)](https://raw.githubusercontent.com/afernandes/ConnectionFactory.NET/master/LICENSE.md)
 [![Release](https://img.shields.io/github/release/afernandes/ConnectionFactory.NET.svg?label=Release&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/afernandes/ConnectionFactory.NET/latest/total.svg?label=Downloads&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest/)
+[![Github all releases](https://img.shields.io/github/downloads/afernandes/ConnectionFactory.NET/total.svg?label=Downloads&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest/)
+
 
 Framework Connection Factory .NET
 ===================
@@ -28,13 +29,13 @@ Framework Connection Factory .NET
 </ul>
 
 
-##Objetivo
+## Objetivo
 Oferecer um conjunto de funções para comunicação com banco de dados auxiliando no trabalho dos desenvolvedores de sistemas.
 
 ## Premissas
 implementar funções similares ao iBATIS DAO simplificando a camada de persistência com o banco de dados, mas **sem a necessidade de utilizar os XML para mapeamento das entidades**. 
 
-##Características
+## Características
 
 Suporte a todos provedores de bancos de dados que implementam o ADO.NET
 : Tudo que é necessário para para se conectar a um novo banco é adicioná-lo ao arquivo de configurações  ([exemplo do Web.config](#web.config))
@@ -66,7 +67,7 @@ Retorno automático de entidades (DTO / VO) carregadas a partir das querys
 
 ([Exemplo de chamada da conexão](#conectando))
 
-##<a id="CfConnection">ConnectionFactory.CfConnection
+## <a id="CfConnection">ConnectionFactory.CfConnection
 
 ### <a id="conectando">Exemplo de conexão com o banco de dados
 
