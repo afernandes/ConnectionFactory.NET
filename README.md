@@ -2,7 +2,8 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?maxAge=60)](https://raw.githubusercontent.com/afernandes/ConnectionFactory.NET/master/LICENSE.md)
 [![Release](https://img.shields.io/github/release/afernandes/ConnectionFactory.NET.svg?label=Release&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest)
 [![Github all releases](https://img.shields.io/github/downloads/afernandes/ConnectionFactory.NET/total.svg?label=Downloads&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest/)
-
+[![NuGet](https://img.shields.io/nuget/dt/ConnectionFactory.NET.svg?label=Nuget&maxAge=60)]
+(https://www.nuget.org/packages/ConnectionFactory.NET/)
 
 Framework Connection Factory .NET
 ===================
