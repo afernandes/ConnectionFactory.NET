@@ -8,6 +8,7 @@ namespace ConnectionFactory
     {
         #region QueryForObject
 
+        #region Generic methods
         /// <summary>
         /// Performs datareader and returns loaded entity
         /// </summary>
@@ -28,6 +29,18 @@ namespace ConnectionFactory
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return QueryForObject<T>(cmdType, cmdText, cfParams);
+        }
+
+        public T QueryForObject<T>(string cmdText,
+            IEnumerable<CfParameter> cmdParms = null) where T : new()
+        {
+            return QueryForObject<T>(CfCommandType.Text, cmdText, cmdParms);
+        }
+
+        public T QueryForObject<T>(string cmdText,
+            object cmdParms) where T : new()
+        {
+            return QueryForObject<T>(CfCommandType.Text, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -89,7 +102,9 @@ namespace ConnectionFactory
             Logger.Debug("End method");
             return entity;
         }
+        #endregion
 
+        #region Dynamic methods
         public dynamic QueryForObject(
             CfCommandType cmdType, string cmdText, IEnumerable<CfParameter> cmdParms = null)
         {
@@ -103,11 +118,23 @@ namespace ConnectionFactory
             return QueryForObject(cmdType, cmdText, cfParams);
         }
 
+        public dynamic QueryForObject(
+            string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        {
+            return QueryForObject(CfCommandType.Text, cmdText, cmdParms);
+        }
+
+        public dynamic QueryForObject(
+            string cmdText, object cmdParms)
+        {
+            return QueryForObject(CfCommandType.Text, cmdText, cmdParms);
+        }
+
         public static dynamic QueryForObject(IDataReader dr)
         {
             return dr.Read() ? dr.ToExpando() : null;
         }
-
+        #endregion
         #endregion
     }
 }

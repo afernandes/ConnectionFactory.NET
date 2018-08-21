@@ -8,6 +8,7 @@ namespace ConnectionFactory
     {
         #region QueryForList
 
+        #region Generic methods
         /// <summary>
         /// Datareader Performs and returns the list loaded entities
         /// </summary>
@@ -28,6 +29,18 @@ namespace ConnectionFactory
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return QueryForList<T>(cmdType, cmdText, cfParams);
+        }
+
+        public IList<T> QueryForList<T>(
+            string cmdText, IEnumerable<CfParameter> cmdParms = null) where T : new()
+        {
+            return QueryForList<T>(CfCommandType.Text, cmdText, cmdParms);
+        }
+
+        public IList<T> QueryForList<T>(
+            string cmdText, object cmdParms) where T : new()
+        {
+            return QueryForList<T>(CfCommandType.Text, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -90,6 +103,9 @@ namespace ConnectionFactory
 
         }
 
+        #endregion
+
+        #region Dynamic methods
         /// <summary>
         /// Datareader Performs and returns the list loaded entities
         /// </summary>
@@ -108,6 +124,18 @@ namespace ConnectionFactory
         {
             var cfParams = ConvertObjectToCfParameters(cmdParms);
             return QueryForList(cmdType, cmdText, cfParams);
+        }
+
+        public IList<dynamic> QueryForList(
+            string cmdText, IEnumerable<CfParameter> cmdParms = null)
+        {
+            return QueryForList(CfCommandType.Text, cmdText, cmdParms);
+        }
+
+        public IList<dynamic> QueryForList(
+            string cmdText, object cmdParms)
+        {
+            return QueryForList(CfCommandType.Text, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -131,6 +159,8 @@ namespace ConnectionFactory
 
         }
 
+        #endregion
+        
         #endregion
     }
 }
