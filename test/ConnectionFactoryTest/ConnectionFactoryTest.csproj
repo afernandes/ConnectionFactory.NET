@@ -76,12 +76,7 @@
       <Project>{e4237f09-e01c-4cb3-a9af-05970df33082}</Project>
       <Name>ConnectionFactoryNET45</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations">
-      <Version>4.5.0</Version>
-    </PackageReference>
-  </ItemGroup>
+  </ItemGroup> 
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
