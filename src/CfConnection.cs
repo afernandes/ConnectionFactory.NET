@@ -52,7 +52,10 @@ namespace ConnectionFactory
         [System.Diagnostics.DebuggerStepThrough]
         public CfConnection(DbConnection connection)
         {
-            _conn = connection ?? throw new ArgumentException("connection not defined", "connection");
+            if (connection == null)            
+                throw new ArgumentException("connection not defined", "connection");
+            
+            _conn = connection;
 #if NET45
             _dbProvider = DbProviderFactories.GetFactory(connection);
 #endif
