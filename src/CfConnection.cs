@@ -50,6 +50,16 @@ namespace ConnectionFactory
         }
 
         [System.Diagnostics.DebuggerStepThrough]
+        public CfConnection(DbConnection connection)
+        {
+            _conn = connection ?? throw new ArgumentException("connection not defined", "connection");
+#if NET45
+            _dbProvider = DbProviderFactories.GetFactory(connection);
+#endif
+        }
+
+
+        [System.Diagnostics.DebuggerStepThrough]
         public void Dispose()
         {
             CloseFactoryConnection();
@@ -63,7 +73,7 @@ namespace ConnectionFactory
             try
             {
                 if (null == _conn)
-                    _conn = _dbProvider.CreateConnection();
+                    _conn = _dbProvider?.CreateConnection();
 
                 if (_conn == null || !_conn.State.Equals(ConnectionState.Closed)) return;
 
@@ -153,16 +163,19 @@ namespace ConnectionFactory
         }
 
         [System.Diagnostics.DebuggerStepThrough]
-        public CfCommand CreateCfCommand()
+        public CfCommand CreateCfCommand(int commandTimeout = -1)
         {
             var cfConnection = this;
-            return new CfCommand(ref cfConnection);
+            return new CfCommand(ref cfConnection, commandTimeout);
         }
 
         [System.Diagnostics.DebuggerStepThrough]
         public DbDataAdapter CreateDataAdapter()
         {
-            var dataAdp = _dbProvider.CreateDataAdapter();
+            if (_dbProvider == null)
+                throw new ArgumentException("dbProvider not defined for connection");
+
+            var dataAdp = _dbProvider?.CreateDataAdapter();
             return dataAdp;
         }
 

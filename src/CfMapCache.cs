@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET45
 using System.ComponentModel.DataAnnotations.Schema;
+#else
+using System.Data.Linq.Mapping;
+#endif
 using System.Linq;
 using System.Reflection;
 

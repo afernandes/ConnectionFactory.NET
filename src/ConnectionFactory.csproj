@@ -35,9 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -71,7 +68,6 @@
   <ItemGroup>
     <None Include="ConnectionFactory.nuspec" />
     <None Include="nugetScript.bat" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\net40\ConnectionFactory.dll" />
@@ -79,6 +75,11 @@
     <Content Include="lib\net45\ConnectionFactory.dll" />
     <Content Include="lib\net45\ConnectionFactory.XML" />
     <Content Include="nuget.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
