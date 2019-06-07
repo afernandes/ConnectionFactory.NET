@@ -3,6 +3,7 @@
 [![Release](https://img.shields.io/github/release/afernandes/ConnectionFactory.NET.svg?label=Release&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest)
 [![Github all releases](https://img.shields.io/github/downloads/afernandes/ConnectionFactory.NET/total.svg?label=Downloads&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest/)
 [![NuGet](https://img.shields.io/nuget/dt/ConnectionFactory.NET.svg?label=Nuget&maxAge=60)](https://www.nuget.org/packages/ConnectionFactory.NET/)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fafernandes%2FConnectionFactory.NET.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fafernandes%2FConnectionFactory.NET?ref=badge_shield)
 
 Framework Connection Factory .NET
 ===================
@@ -320,3 +321,7 @@ namespace User.Vo
 }
 ```
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fafernandes%2FConnectionFactory.NET.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fafernandes%2FConnectionFactory.NET?ref=badge_large)
