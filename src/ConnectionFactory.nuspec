@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ConnectionFactory.NET</id>
-    <version>1.0.2</version>
+    <version>2.0.0</version>
     <title>Framework Connection Factory .NET</title>
     <authors>Anderson Fernandes do Nascimento</authors>
     <owners>afernandes</owners>
@@ -10,7 +10,7 @@
     <projectUrl>http://afernandes.github.io/ConnectionFactory.NET/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Functions similar to iBATIS and Dapper, but without XML</description>
-    <releaseNotes>ExecuteScalar, QueryForObject, QueryForList, ExecuteReader, ExecuteNonQuery</releaseNotes>
+    <releaseNotes>Atualiza log4net para 3.5.0 e corrige a CVE-2026-40021. Requer .NET Framework 4.8; consumidores devem recompilar e revisar configurações e redirecionamentos de assembly do log4net 2.x. O pacote contém somente os binários atuais para net48.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>connection-factory dapper ibatis orm dal micro-orm</tags>
 	<dependencies>

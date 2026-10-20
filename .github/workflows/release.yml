@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nuget-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    name: Publicar no NuGet e GitHub
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-package
+          path: artifacts
+
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Conferir tag e pacote
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME.Substring(1)
+          $packages = @(Get-ChildItem artifacts/*.nupkg)
+          if ($packages.Count -ne 1 -or $packages[0].Name -cne "ConnectionFactory.NET.$version.nupkg") {
+            throw 'A tag precisa corresponder a versao exata do unico pacote validado.'
+          }
+
+      - name: Autenticar no NuGet com OIDC
+        id: nuget-login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: AndersonN
+
+      - name: Publicar pacote validado
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: |
+          $package = Get-ChildItem artifacts/*.nupkg
+          dotnet nuget push $package.FullName --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+          if ($LASTEXITCODE -ne 0) { throw 'A publicacao no NuGet falhou.' }
+
+      - name: Publicar release no GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: pwsh
+        run: |
+          gh release create $env:GITHUB_REF_NAME artifacts/*.nupkg artifacts/*.dll artifacts/*.XML --verify-tag --title $env:GITHUB_REF_NAME --notes-file artifacts/RELEASE_NOTES.md
+          if ($LASTEXITCODE -ne 0) { throw 'A publicacao da release no GitHub falhou.' }

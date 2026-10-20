@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/g0bhdeqso4eydfi6?svg=true)](https://ci.appveyor.com/project/afernandes/connectionfactory-net)
+[![CI](https://github.com/afernandes/ConnectionFactory.NET/actions/workflows/ci.yml/badge.svg)](https://github.com/afernandes/ConnectionFactory.NET/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?maxAge=60)](https://raw.githubusercontent.com/afernandes/ConnectionFactory.NET/master/LICENSE.md)
 [![Release](https://img.shields.io/github/release/afernandes/ConnectionFactory.NET.svg?label=Release&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest)
 [![Github all releases](https://img.shields.io/github/downloads/afernandes/ConnectionFactory.NET/total.svg?label=Downloads&maxAge=60)](https://github.com/afernandes/ConnectionFactory.NET/releases/latest/)
@@ -44,6 +44,9 @@ Aplicações consumidoras devem usar .NET Framework 4.8 e recompilar com a nova
 dependência; configurações e redirecionamentos de assembly do log4net 2.x devem
 ser revisados na migração para 3.x.
 
+O pacote 2.0.0 introduz esses novos requisitos de compatibilidade. Versões 1.x
+já publicadas no NuGet.org são imutáveis e não recebem a atualização da dependência.
+
 No Developer Command Prompt do Visual Studio, com o targeting pack do .NET
 Framework 4.8 instalado, execute:
 
@@ -62,6 +65,22 @@ Os testes `LogXmlSecurityTests` verificam os dois layouts XML afetados, incluind
 caracteres proibidos nos metadados e preservação de Unicode válido. Os testes
 de banco existentes exigem a instância e o banco configurados em
 `test\ConnectionFactoryTest\App.config`.
+
+## Integracao continua e publicacao
+
+O GitHub Actions compila em Release no Windows, executa todos os testes com SQL
+Server LocalDB e guarda o pacote validado e os resultados TRX como artefatos.
+A configuracao de banco e ajustada somente no arquivo gerado para os testes.
+
+Uma tag `v<versao>` publica o pacote correspondente por `.github/workflows/release.yml`.
+A versao da tag deve ser igual a do `.nuspec`; o pacote e publicado somente apos
+todos os testes passarem. A release do GitHub recebe o mesmo pacote e os binarios.
+
+O NuGet.org usa Trusted Publishing, sem chave permanente: conta `AndersonN`,
+repositorio `afernandes/ConnectionFactory.NET`, workflow `release.yml`, environment
+`release` e permissao de publicar novas versoes somente de `ConnectionFactory.NET`.
+O job de publicacao recebe `id-token: write`; a release usa o `GITHUB_TOKEN`
+temporario. A publicacao nao e executada em pull requests nem em pushes de branches.
 
 ## Características
 
