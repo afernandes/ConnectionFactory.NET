@@ -55,6 +55,8 @@ Para gerar o pacote local, execute `src\nugetScript.bat` com `msbuild` e `nuget`
 disponíveis no PATH. O script restaura e recompila a biblioteca antes de empacotar
 `bin\Release\ConnectionFactory.dll` em `lib\net48`. Os binários históricos de
 `src\lib\net40` e `src\lib\net45` não são usados pelo novo pacote.
+O `.nuspec` usa a propriedade `Configuration` para selecionar os arquivos da
+compilação: o empacotamento pelo `.csproj` no AppVeyor também funciona em Debug.
 
 Os testes `LogXmlSecurityTests` verificam os dois layouts XML afetados, incluindo
 caracteres proibidos nos metadados e preservação de Unicode válido. Os testes

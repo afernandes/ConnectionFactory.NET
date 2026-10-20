@@ -75,11 +75,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\net40\ConnectionFactory.dll" />
-    <Content Include="lib\net40\ConnectionFactory.XML" />
-    <Content Include="lib\net45\ConnectionFactory.dll" />
-    <Content Include="lib\net45\ConnectionFactory.XML" />
-    <Content Include="nuget.exe" />
+    <None Include="lib\net40\ConnectionFactory.dll" />
+    <None Include="lib\net40\ConnectionFactory.XML" />
+    <None Include="lib\net45\ConnectionFactory.dll" />
+    <None Include="lib\net45\ConnectionFactory.XML" />
+    <None Include="nuget.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

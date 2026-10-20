@@ -20,7 +20,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\ConnectionFactory.dll" target="lib\net48\" />
-    <file src="bin\Release\ConnectionFactory.XML" target="lib\net48\" />
+    <file src="bin\$configuration$\ConnectionFactory.dll" target="lib\net48\" />
+    <file src="bin\$configuration$\ConnectionFactory.XML" target="lib\net48\" />
   </files>
 </package>
