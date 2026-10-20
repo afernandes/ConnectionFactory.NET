@@ -14,10 +14,13 @@
     <copyright>Copyright 2017</copyright>
     <tags>connection-factory dapper ibatis orm dal micro-orm</tags>
 	<dependencies>
-        <dependency id="log4net" version="2.0.8" />
+        <group targetFramework="net48">
+          <dependency id="log4net" version="3.5.0" />
+        </group>
     </dependencies>
   </metadata>
   <files>
-	<file src="lib\**" target="lib\" />
+    <file src="bin\Release\ConnectionFactory.dll" target="lib\net48\" />
+    <file src="bin\Release\ConnectionFactory.XML" target="lib\net48\" />
   </files>
 </package>

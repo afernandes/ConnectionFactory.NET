@@ -36,6 +36,31 @@ Oferecer um conjunto de funções para comunicação com banco de dados auxilian
 ## Premissas
 implementar funções similares ao iBATIS DAO simplificando a camada de persistência com o banco de dados, mas **sem a necessidade de utilizar os XML para mapeamento das entidades**. 
 
+## Compilação e dependências
+
+Os projetos usam .NET Framework 4.8 e log4net 3.5.0. Essa versão do log4net
+inclui a correção da CVE-2026-40021, que podia causar perda de eventos de log XML.
+Aplicações consumidoras devem usar .NET Framework 4.8 e recompilar com a nova
+dependência; configurações e redirecionamentos de assembly do log4net 2.x devem
+ser revisados na migração para 3.x.
+
+No Developer Command Prompt do Visual Studio, com o targeting pack do .NET
+Framework 4.8 instalado, execute:
+
+```bat
+msbuild src\ConnectionFactory.sln /t:Restore,Build /p:RestorePackagesConfig=true /p:Configuration=Release
+```
+
+Para gerar o pacote local, execute `src\nugetScript.bat` com `msbuild` e `nuget`
+disponíveis no PATH. O script restaura e recompila a biblioteca antes de empacotar
+`bin\Release\ConnectionFactory.dll` em `lib\net48`. Os binários históricos de
+`src\lib\net40` e `src\lib\net45` não são usados pelo novo pacote.
+
+Os testes `LogXmlSecurityTests` verificam os dois layouts XML afetados, incluindo
+caracteres proibidos nos metadados e preservação de Unicode válido. Os testes
+de banco existentes exigem a instância e o banco configurados em
+`test\ConnectionFactoryTest\App.config`.
+
 ## Características
 
 Suporte a todos provedores de bancos de dados que implementam o ADO.NET
